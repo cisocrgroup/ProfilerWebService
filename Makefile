@@ -3,8 +3,10 @@
 #
 
 # PREFIX ?=
-AXIS2_HOME ?= $(HOME)/bin
-WSDL2JAVA ?= wsdl2java.sh
+AXIS_HOME ?= $(HOME)/Downloads/axis2-1.6.2
+
+# TOOLS
+WSDL2JAVA ?= $(AXIS_HOME)/bin/wsdl2java.sh
 ANT ?= ant
 MKDIR ?= mkdir -p
 
@@ -12,12 +14,12 @@ MKDIR ?= mkdir -p
 mkdir-%:
 	$(MKDIR) $*
 
-default: build.xml
+default: ant
 
 build.xml: xml-resources/axis2/META-INF/ProfilerWebService.wsdl
-	$(WSDL2JAVA) -uri $<
+	CLASSPATH=$(CLASSPATH):$(AXIS_HOME)/lib/* $(WSDL2JAVA) -uri $< -d adb -s
 
-ant:
+ant: build.xml
 	$(ANT)
 
 libs/apache.jar: | mkdir-libs
