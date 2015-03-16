@@ -29,7 +29,7 @@ default: $(PROFILER_AAR)
 # -sd: service-description
 # -or: override
 # -ssi service-interface
-build.xml: xml-resources/axis2/META-INF/ProfilerWebService.wsdl $(WSDL2JAVA)
+build.xml: resources/ProfilerWebService.wsdl $(WSDL2JAVA)
 	$(WSDL2JAVA) -uri $< -ss -sd -or -ssi
 
 $(PROFILER_AAR): build.xml
