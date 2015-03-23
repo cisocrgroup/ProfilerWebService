@@ -3,7 +3,7 @@
  * ProfilerWebServiceSkeletonInterface.java
  *
  * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.3  Built on : Aug 10, 2007 (04:45:47 LKT)
+ * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST)
  */
     package cis.profiler.web;
     /**
@@ -14,103 +14,7 @@
          
         /**
          * Auto generated method signature
-         
-                                    * @param resendIDRequest
-         */
-
-        
-                public de.uni_muenchen.cis.www.profiler.ResendIDResponse resendID
-                (
-                  de.uni_muenchen.cis.www.profiler.ResendIDRequest resendIDRequest
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         
-         */
-
-        
-                public de.uni_muenchen.cis.www.profiler.GetConfigurationsResponse getConfigurations
-                (
-                  
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         
-         */
-
-        
-                public de.uni_muenchen.cis.www.profiler.GetSimpleConfigurationsResponse getSimpleConfigurations
-                (
-                  
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         
-                                    * @param getTransactionsRequest
-         */
-
-        
-                public de.uni_muenchen.cis.www.profiler.GetTransactionsResponse getTransactions
-                (
-                  de.uni_muenchen.cis.www.profiler.GetTransactionsRequest getTransactionsRequest
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         
-                                    * @param createAccountRequest
-         */
-
-        
-                public de.uni_muenchen.cis.www.profiler.CreateAccountResponse createAccount
-                (
-                  de.uni_muenchen.cis.www.profiler.CreateAccountRequest createAccountRequest
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         
-                                    * @param checkQuotaRequest
-         */
-
-        
-                public de.uni_muenchen.cis.www.profiler.CheckQuotaResponse checkQuota
-                (
-                  de.uni_muenchen.cis.www.profiler.CheckQuotaRequest checkQuotaRequest
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         
-                                    * @param getProfileRequest
-         */
-
-        
-                public de.uni_muenchen.cis.www.profiler.GetProfileResponse getProfile
-                (
-                  de.uni_muenchen.cis.www.profiler.GetProfileRequest getProfileRequest
-                 )
-            ;
-        
-         
-        /**
-         * Auto generated method signature
-         
+         * 
                                     * @param simpleEnrichRequest
          */
 
@@ -124,21 +28,47 @@
          
         /**
          * Auto generated method signature
-         
-                                    * @param getProfilingStatusRequest
+         * 
          */
 
         
-                public de.uni_muenchen.cis.www.profiler.GetProfilingStatusResponse getProfilingStatus
+                public de.uni_muenchen.cis.www.profiler.StartSessionResponse startSession
                 (
-                  de.uni_muenchen.cis.www.profiler.GetProfilingStatusRequest getProfilingStatusRequest
+                  
                  )
             ;
         
          
         /**
          * Auto generated method signature
+         * 
+         */
+
+        
+                public de.uni_muenchen.cis.www.profiler.GetSimpleConfigurationsResponse getSimpleConfigurations
+                (
+                  
+                 )
+            ;
+        
          
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param createAccountRequest
+         */
+
+        
+                public de.uni_muenchen.cis.www.profiler.CreateAccountResponse createAccount
+                (
+                  de.uni_muenchen.cis.www.profiler.CreateAccountRequest createAccountRequest
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param validateEmailRequest
          */
 
@@ -152,7 +82,34 @@
          
         /**
          * Auto generated method signature
+         * 
+         */
+
+        
+                public de.uni_muenchen.cis.www.profiler.GetConfigurationsResponse getConfigurations
+                (
+                  
+                 )
+            ;
+        
          
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param resendIDRequest
+         */
+
+        
+                public de.uni_muenchen.cis.www.profiler.ResendIDResponse resendID
+                (
+                  de.uni_muenchen.cis.www.profiler.ResendIDRequest resendIDRequest
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
                                     * @param abortProfilingRequest
          */
 
@@ -166,13 +123,56 @@
          
         /**
          * Auto generated method signature
-         
+         * 
+                                    * @param getProfileRequest
          */
 
         
-                public de.uni_muenchen.cis.www.profiler.StartSessionResponse startSession
+                public de.uni_muenchen.cis.www.profiler.GetProfileResponse getProfile
                 (
-                  
+                  de.uni_muenchen.cis.www.profiler.GetProfileRequest getProfileRequest
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param getProfilingStatusRequest
+         */
+
+        
+                public de.uni_muenchen.cis.www.profiler.GetProfilingStatusResponse getProfilingStatus
+                (
+                  de.uni_muenchen.cis.www.profiler.GetProfilingStatusRequest getProfilingStatusRequest
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param getTransactionsRequest
+         */
+
+        
+                public de.uni_muenchen.cis.www.profiler.GetTransactionsResponse getTransactions
+                (
+                  de.uni_muenchen.cis.www.profiler.GetTransactionsRequest getTransactionsRequest
+                 )
+            ;
+        
+         
+        /**
+         * Auto generated method signature
+         * 
+                                    * @param checkQuotaRequest
+         */
+
+        
+                public de.uni_muenchen.cis.www.profiler.CheckQuotaResponse checkQuota
+                (
+                  de.uni_muenchen.cis.www.profiler.CheckQuotaRequest checkQuotaRequest
                  )
             ;
         

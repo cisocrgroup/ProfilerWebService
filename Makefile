@@ -15,6 +15,8 @@ WEB_INF_DIR = $(PROFILER_DIR)/WEB-INF
 PROFILER_CONF_DIR = $(WEB_INF_DIR)/conf
 PROFILER_LIB_DIR = $(PROFILER_DIR)/lib
 PROFILER_INI = $(PROFILER_CONF_DIR)/profiler.ini
+SERVICES_XML = resources/services.xml
+WSDL = resources/ProfilerWebService.wsdl
 
 # TOOLS
 ANT ?= ant
@@ -25,14 +27,19 @@ CP ?= cp
 # DEFAULT
 default: $(PROFILER_AAR)
 
+src/cis/profiler/web/ProfilerWebServiceSkeleton.java: src/cis/profiler/web/ProfilerWebService.java build.xml
+	@sed -e 's/ProfilerWebService/ProfilerWebServiceSkeleton/g' \
+	     -e 's/ProfilerWebServiceSkeletonSkeletonInterface/ProfilerWebServiceSkeletonInterface/g' \
+	     $< > $@
+
 # -ss: server-side
 # -sd: service-description
 # -or: override
 # -ssi service-interface
-build.xml: resources/ProfilerWebService.wsdl $(WSDL2JAVA)
-	$(WSDL2JAVA) -uri $< -ss -sd -or -ssi
+build.xml: $(WSDL) $(WSDL2JAVA)
+	$(WSDL2JAVA) -uri $< -p cis.profiler.web -sd -ss -ssi
 
-$(PROFILER_AAR): build.xml
+$(PROFILER_AAR): src/cis/profiler/web/ProfilerWebServiceSkeleton.java
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
 
 var/$(AXIS2).zip: | mkdir-var
@@ -53,12 +60,17 @@ deploy: $(PROFILER_INI) $(PROFILER_AAR)
 	$(CP) $(PROFILER_AAR) $(APACHE)/webapps/axis2/WEB-INF/services
 
 # HELPER
+mkdir-%: dir = $(subst -,/,$*)
 mkdir-%:
-	@$(MKDIR) $*
+	@$(MKDIR) $(dir)
+
 .PHONY: clean
 clean:
-	$(RM) build.xml
+	$(RM) $(BUILD_XML)
 	$(RM) -r build
+
 .PHONY: distclean
 distclean: clean
 	$(RM) -r var
+	$(RM) -r src/de
+	$(RM) -r src/org
