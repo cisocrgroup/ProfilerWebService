@@ -44,7 +44,7 @@ $(WSDL2JAVA): var/$(AXIS2).zip
 
 $(PROFILER_INI):
 	@$(MKDIR) $(PROFILER_CONF_DIR)
-	$(call generate_profiler_ini,$@)
+	scripts/generate_profiler_ini.sh $@
 
 deploy: $(PROFILER_INI) $(PROFILER_AAR)
 	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/conf
@@ -62,15 +62,3 @@ clean:
 .PHONY: distclean
 distclean: clean
 	$(RM) -r var
-
-define generate_profiler_ini
-	@echo "# profiler.ini" > $1
-	@echo "# automatically generated on `date`" >> $1
-	@echo "# *do not edit*" >> $1
-	@echo "" >> $1
-	@echo "dbURL = jdbc:mysql://alpha.cis.uni-muenchen.de:3306/ProfilerWebService" >> $1
-	@echo "username = pws" >> $1
-	@echo "password = pws1314" >> $1
-	@echo "default_quota = 100" >> $1
-	@echo "backend_home = /srv/www/tomcat/postcorrection_backend" >> $1
-endef
