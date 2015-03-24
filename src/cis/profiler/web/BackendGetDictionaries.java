@@ -7,9 +7,8 @@ import java.util.ArrayList;
 public class BackendGetDictionaries {
         private final File dir_;
         public BackendGetDictionaries(Properties props) {
-                dir_ = new File(
-                        props.getProperty("backend_home") +
-                        "/OCRC_dictionaries/config_profiler/");
+                String backend = props.getProperty("backend_home");
+                dir_ = new File(backend + "/OCRC_dictionaries/config_profiler/");
         }
         public String[] getDictionaries() {
                 ArrayList<String> configs  = new ArrayList();
