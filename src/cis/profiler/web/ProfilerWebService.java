@@ -110,7 +110,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         }
         Logger.getLogger(ProfilerWebService.class.getName()).log(Level.INFO, msg);
     }
-    
+
     private void log(Exception e) {
          try {
             if (o != null) {
@@ -122,13 +122,13 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         }
         Logger.getLogger(ProfilerWebService.class.getName()).log(Level.SEVERE, null, e);
     }
-    
+
     private String getDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
     }
-    
+
     private Connection connect() throws ClassNotFoundException, SQLException {
         String dbUrl = prop.getProperty("dbURL");
         String username = prop.getProperty("username");
@@ -138,7 +138,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         Class.forName("com.mysql.jdbc.Driver");
         return DriverManager.getConnection(dbUrl, username, password);
     }
-    
+
     private void close(Connection connection) {
         try {
             if (connection != null) {
@@ -148,8 +148,8 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
             log(e);
         }
     }
-    
-    
+
+
     private void insertTransactionInfo(Connection c, String userid, String ip, String docinfo, String profname, String profinfo) throws SQLException {
         Statement s = c.createStatement();
         String sqlstr = "INSERT INTO transactions (userid, ipaddress, docname, docinfos, profname, profilerinfos) VALUES (\"" +
@@ -157,11 +157,11 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         log("sqlstr: " + sqlstr);
         s.executeUpdate(sqlstr);
     }
-    
+
     private String getDocname() {
         return tempfile.getName() + " # " + doc_out.getName() + " # " + log.getName();
     }
-    
+
     @Override
     public ResendIDResponse resendID(ResendIDRequest resendIDRequest) {
         ResendIDResponse resp = new ResendIDResponse();
@@ -506,7 +506,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         }
         return str.toString();
     }
-    
+
     @Override
     public GetProfileResponse getProfile(GetProfileRequest getProfileRequest) {
         GetProfileResponse resp = new GetProfileResponse();
@@ -557,7 +557,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
                 if( inputType.equals(FileType.DOCXML.toString())) {
                     tempfile = File.createTempFile("doc_", ".xml");
                 } else if( inputType.equals(FileType.TXT.toString())) {
-                    tempfile = File.createTempFile("doc_", ".txt");                    
+                    tempfile = File.createTempFile("doc_", ".txt");
                 } else {
                     rst.setDoc_out(new AttachmentType());
                     rst.setProfile_out(new AttachmentType());
@@ -568,9 +568,9 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
                     rst.setMessage("unknown inputtype");
                     rst.setReturncode(-1);
                     resp.setGetProfileResponse(rst);
-                    return resp;                    
+                    return resp;
                 }
-                
+
                 FileOutputStream out = new FileOutputStream(tempfile);
                 InputStream in = dh.getInputStream();
 
@@ -632,9 +632,9 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
                 status = "profiling";
 
                 p = b.start();
-                
+
                 insertTransactionInfo(con, rqt.getUserid(), ip, "", "", "");
-                
+
                 log("profiling started");
                 //o.write("profiling started " + System.currentTimeMillis() + "\n");
                 //o.flush();
@@ -674,7 +674,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
 
                 this.isProfiling = false;
 //                int retval = p.exitValue();
-//                                
+//
 //                o.write("Profiling done, retval= "+ retval);
 //                o.flush();
 //
