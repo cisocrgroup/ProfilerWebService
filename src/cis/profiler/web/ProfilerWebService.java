@@ -39,7 +39,9 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         public ProfilerWebService() {
                 try {
                         backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
+                        logBackend();
                 } catch (IOException e) {
+                        log(e);
                         throw new RuntimeException(e);
                 }
         }
@@ -87,6 +89,17 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         }
         private void log(Level level, String msg) {
                 logger.log(level, msg);
+        }
+        private void logBackend() {
+                try {
+                        log(Level.INFO, ProfilerWebService.class.getName() + " created");
+                        log(Level.INFO, "backend:  " + backend.getBackendDir().getPath());
+                        log(Level.INFO, "profiler: " + backend.getProfilerExe().getPath());
+                        for (String language: backend.getLanguages())
+                                log(Level.INFO, "language: " + language);
+                } catch (BackendException e) {
+                        log(e);
+                }
         }
 
         // old interface
