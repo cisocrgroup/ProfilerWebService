@@ -14,9 +14,8 @@
     <property name="lib" value="${build}/lib"/>
     <property name="resources" value="${project.base.dir}/resources"/>
     <property value="" name="jars.ok"/>
-    <property name="profiler.ini" value="${build}/profiler.ini" />
-    <property name="backend.home" value="${env.BACKEND_HOME}" />
-
+    <property name="profiler.ini" value="${build}/profiler.ini"/>
+    <property name="backend.home" value="${env.BACKEND_HOME}"/>
     <path id="axis2.class.path">
         <pathelement path="${java.class.path}"/>
         <pathelement path="${maven.class.path}"/>
@@ -111,7 +110,6 @@
     <target name="clean">
         <delete dir="${build}"/>
     </target>
-
     <!-- custom -->
     <target name="config.file" depends="init">
       <propertyfile file="${profiler.ini}"
