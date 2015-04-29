@@ -31,14 +31,14 @@ import org.w3.www._2005._05.xmlmime.Base64Binary;
  *
  * @author thorsten (thorsten.vobl@googlemail.com)
  */
-public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSkeletonInterface {
+public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         private final String CONFIG_FILE = "/conf/profiler.ini";
         private Backend backend;
         public ProfilerWebService() {
                 try {
                         backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
                 } catch (IOException e) {
-                        log(e);
+                        throw new RuntimeException(e);
                 }
         }
 
@@ -58,11 +58,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         // get language ini files
         @Override
         public GetConfigurationsResponse getConfigurations() {
-                return null;
-        }
-        // ??
-        @Override
-        public GetSimpleConfigurationsResponse getSimpleConfigurations() {
+                GetConfigurationsResponse response = new GetConfigurationsResponse();
                 return null;
         }
         @Override
@@ -97,6 +93,11 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         }
         @Override
         public CreateAccountResponse createAccount(CreateAccountRequest x) {
+                return null;
+        }
+        // ??
+        @Override
+        public GetSimpleConfigurationsResponse getSimpleConfigurations() {
                 return null;
         }
 }
