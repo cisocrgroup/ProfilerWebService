@@ -1,0 +1,500 @@
+IMPACT Profiler Service
+=============================
+
+Creates a profile
+
+Project homepage: http://www.impact-project.eu
+
+Important notes for a quick start
+---------------------------------
+
+1) Install the underlying command line tool of the generic web service wrapper
+   on your system.
+   IMPORTANT: THE UNDERLYING COMMAND LINE TOOL FOR THE SERVICE SHOULD BE
+   INSTALLED IN A PATH WITHOUT WHITE SPACES. OTHERWISE A FULL PATH CALL TO THE
+   COMMAND LINE TOOL WILL NOT WORK CORRECTLY.
+2) Make sure the Java SE Development Kit (JDK) and Apache Tomcat with the Axis2
+   web application deployed, and Apache Ant are installed on your system. If you
+   do not use the preconfigured IMPACT Apache Tomcat software package,
+   make sure to use the axis2.xml provided in this projects "resources" folder,
+   or compare it to your settings, or apply the settings explained in the
+   detailed Axis2 installation section, because some changes to the default
+   settings are necessary to asure the MTOM binary transfer works properly with
+   large binary files.
+
+Below you will find more detailed instructions.
+
+Requirements
+------------
+
+In order to run the web service test, you will need the Java SE Development Kit
+(JDK) version 1.6.0 or higher, the underlying tool installed, a running
+Apache Tomcat 6.0.18 Servlet Container (or another equivalent Servlet container)
+with the Axis2 web application deployed.
+
+If you want to create a web service for an existing command line application
+using this java based generic web service wrapper, the following software is
+required:
+
+- Underlying command line tool of this web service wrapper installed in a path
+  without white spaces.
+
+- Subversion Client, e.g. http://tortoisesvn.tigris.org for Windows
+  You will need subversion uploading your service implementation to the IMPACT
+  software repository for downloading any additional sources.
+
+- Java SE Development Kit (JDK), JDK 6 Update 12 or higher
+  Please download the Java SE SDK for your system at
+  http://java.sun.com/javaee/downloads/.
+
+- Apache Ant 1.7.0 or higher
+  Please refer to the homepage at http://ant.apache.org and to the manual at
+  http://ant.apache.org/manual/ for information on how to install Apache Ant.
+
+- Apache Tomcat server Version 6.0.18 or higher
+  Please download and install the Apache Tomcat Server 6.0.18 here
+  http://tomcat.apache.org/download-60.cgi and follow the instructions
+  of the RUNNING.txt in your apache tomcat directory. There you will also find
+  the information on how to configure and start the apache tomcat server.
+
+- Apache Axis2/Java Version 1.4.1 or higher
+  Apache Axis is an implementation of the SOAP ("Simple Object Access Protocol")
+  submission  to W3C. You only need the Web Application Archive (WAR) which
+  must be deployed to your Tomcat web applications directory.
+  http://ws.apache.org/axis2
+
+Installing from source (example for Windows XP)
+-----------------------------------------------
+
+1) JAVA
+   a) Download the Java SE Development Kit (JDK), JDK 6 Update 12 or higher
+      from http://java.sun.com/javase/downloads/index.jsp.
+   b) Execute the installer jdk-6u12-windows-i586-p.exe and install it to
+      the standard directory or another directory of your choice, for example
+      to C:\Program Files\Java\jdk1.6.0_12.
+   c) Set the Java environment variables following the instructions of your
+      windows operating system here:
+      http://docs.sun.com/app/docs/doc/820-2215/system-prep-2?a=view
+      For example, Windows XP:
+      - Choose Start -> Settings -> Control Panel.
+      - Double-click System.
+      - Select the Advanced tab and then Environment Variables.
+        -> The Environment Variables window is displayed.
+      - Create a new system wide environment variable JAVA_HOME with the
+        value of your java installation directory:
+        Variable: JAVA_HOME Value: C:\Program Files\Java\jdk1.6.0_12
+      - Click Path in the User Variables and System Variables and click Edit.
+        -> The Edit System Variable window is displayed.
+      - Add the location of the JDK bin directory to the PATH statement.
+        For example, if the PATH statement shown in the Edit System Variable
+        window is %SystemRoot%\system32;%SystemRoot%, the new path statement
+        would then be
+        %SystemRoot%\system32;%SystemRoot%;C:\Program Files\Java\jdk1.6.0_12\bin
+        Separate each directory in the PATH statement with a semicolon as shown.
+      - Click OK to successively close each window.
+
+2) APACHE TOMCAT
+   a) Download Apache Tomcat 6.0.18 or higher from
+          http://tomcat.apache.org/download-60.cgi
+   b) Unzip the apache-tomcat-6.0.18.zip to
+          C:\Program Files\apache-tomcat-6.0.18
+   c) Enable the Apache Tomcat Manager Application for direct deployment.
+      In order to do so, you will have to assign the manager role to one
+      user in the user configuration file
+        C:\Programme\apache-tomcat-6.0.18\conf\tomcat-users.xml
+      For example:
+      <?xml version='1.0' encoding='utf-8'?>
+      <tomcat-users>
+        <role rolename="manager"/>
+        <user username="impact" password="yourpasswod" roles="manager"/>
+      </tomcat-users>
+      This user is used in the deployment ant tasks. Additionally, you can
+      access the Tomcat Manager Application at:
+        http://localhost:8080/manager/html
+   d) Execute the C:\Program Files\apache-tomcat-6.0.18\bin\startup.bat file
+      from the command line in order to see whether the server starts
+      correctly.
+      Open the URL http://localhost:8080 in your browser in order to verify
+      if the Apache Tomcat Welcome page is displayed.
+
+3) APACHE ANT
+   a) Download Apache Ant Version 1.7.1 or higher from
+      http://ant.apache.org/bindownload.cgi
+   b) Install apache ant following the instructions here
+      http://ant.apache.org/manual/install.html
+      The main steps:
+      - Unzip the apache-ant-1.7.0.zip to C:\Program Files\apache-ant-1.7.0
+      - Add the bin directory to your path (see point 1 for details on how
+        to set the environment variable), so that you would have the following
+        path for example:
+        %SystemRoot%\system32;%SystemRoot%;
+          C:\Program Files\Java\jdk1.6.0_12\bin;
+            C:\Program Files\apache-ant-1.7.0\bin
+      - Set the ANT_HOME environment variable to the directory where you
+        installed Ant:
+        Variable: ANT_HOME Value: C:\Program Files\apache-ant-1.7.0
+
+4) APACHE AXIS2
+   a) Download the Apache Axis2 Version 1.4.1 or higher from
+          http://ws.apache.org/axis2/download.cgi
+   b) Unzip the axis2-1.4.1-war.zip
+   c) Copy the web application archive axis2.war to your tomcat web application
+      directory C:\Program Files\apache-tomcat-6.0.18\webapps.
+      The web application should deploy automatically, but you can restart
+      the tomcat server to make sure that it will be deployed to
+          C:\Program Files\apache-tomcat-6.0.18\webapps\axis2.
+      Note:
+          C:\Program Files\apache-tomcat-6.0.18\webapps\axis2\WEB-INF\services
+      is the directory where the impact-dp.aar web service application will
+      later be deployed to.
+   d) IMPORTANT: Please use the Axis2 configuration file
+        impact-profiler-service\resources\axis2.xml
+      which you can find in the project directory and overwrite the axis2.xml
+      configuration file which is placed in:
+          C:\Program Files\apache-tomcat-6.0.18\webapps\axis2\WEB-INF\conf\axis2.xml
+      This is necessary because the MTOM binary data transfer is configured
+      there and would not work correctly with the standard configuration of the
+      Axis2 web application.
+      Alternatively, you can enable/adapt the following settings in the axis2.xml:
+      ...
+      <parameter name="enableMTOM">true</parameter>
+      ...
+      <parameter name="cacheAttachments">true</parameter>
+      <parameter name="attachmentDIR">Axis2Cache</parameter>
+      <parameter name="sizeThreshold">4000</parameter>
+      ...
+      <parameter name="ConfigContextTimeoutInterval">300000</parameter>
+      ...
+      <parameter name="userName">your admin user</parameter>
+      <parameter name="password">your admin password</parameter>
+      ...
+      <parameter name="hostname" locked="true">localhost</parameter>
+
+6) PROJECT profiler-service
+   c) Edit the 'build.properties' in the project root folder and configure
+      the parameters following the corresponding comments.
+   e) Build service and client using the ant task:
+        C:\path_to_impact-dp_dir\> ant build
+   f) Before testing the first time, start the apache tomcat server or
+      restart it if it is already running (this is necessary in order to make
+      sure that additional libraries - see ant task service.libs.copy - are
+      loaded by the Axis2 web application).
+      If the server is not running, you will get an error that the connection
+      was refused.
+      You start the tomcat server from the command line:
+        C:\path_to_tomcat_home\bin\> startup.bat
+      and stop it:
+        C:\path_to_tomcat_home\bin\> shutdown.bat
+      Execute
+        C:\path_to_impact-dp_dir\> ant test
+      In order to test the application. This will build the project and
+      execute the command line test client which performs a simple file
+      transfer using the web service.
+
+Securing the Web Service
+------------------------
+
+For interoperability reasons, within the IMPACT project, web services
+should be secured via basic HTTP-Authentication which is provided by the
+web application container or any web server which you are using as frontend
+server.
+
+Using the Apache2 webserver as frontend, you can configure the
+HTTP-Authentication as follows (example for Linux):
+
+1) Create a password file for a new user
+       htpasswd -c /usr/local/apache2/pwds newuser
+2) Configure access restriction in your httpd.conf, e.g. in
+       /usr/local/apache2/httpd.conf
+  restricting the access to the axis2 location (depends on the path):
+    <Location /axis2>
+        AuthName "only for registered users"
+        AuthType Basic
+        AuthUserFile "/usr/local/apache2/pwds"
+        <Limit GET>
+            require valid-user
+        </Limit>
+    </Location>
+
+Also in the Apache Tomcat web server you can secure the web service
+via basic HTTP-Authentication (example for Linux):
+
+1) Configure the web.xml of the axis2 web application:
+      /usr/local/java/apache-tomcat-6.0.18/webapps/axis2/WEB-INF/web.xml
+    and add the following:
+      <web-app>
+      â€¦
+        <security-constraint>
+          <web-resource-collection>
+              <web-resource-name>secured services</web-resource-name>
+              <url-pattern>/services/*</url-pattern>
+          </web-resource-collection>
+          <auth-constraint>
+              <role-name>webservice</role-name>
+          </auth-constraint>
+        </security-constraint>
+        <login-config>
+          <auth-method>BASIC</auth-method>
+          <realm-name>webservice</realm-name>
+        </login-config>
+     </web-app>
+
+2) This requires the user "webservice" to be defined in the tomcat-users.xml:
+       /usr/local/java/apache-tomcat-6.0.18/conf/tomcat-users.xml
+    as follows:
+       <?xml version="1.0" encoding="utf-8">
+       <tomcat-users>
+           <role rolename="webservice"/>
+           <user username="impact" password="100%OCR" roles="webservice"/>
+       </tomcat-users>
+
+Note: In a productive environment the web service should be offered over SSH.
+
+Logging
+-------
+For logging log4j is used for the demonstrator platform.
+The client places logfiles in the project subdirectory "log".
+If you want the service to log in the same directory, please adapt the
+Axis2 configuration accordingly. Change the log4j properties in the file
+    ${local.tomcat.base.dir}/${local.tomcat.axis.dir}/WEB-INF/classes/log4j.properties
+e.g.
+    /usr/local/java/apache-tomcat-6.0.18/webapps/axis2/WEB-INF/classes/log4j.properties
+You can indicate to create a log file:
+    log4j.rootCategory=INFO, CONSOLE, LOGFILE
+and specify the log file itself:
+    log4j.appender.LOGFILE.File=log/impact-service.log
+
+Documentation
+-------------
+
+Please execute the ant task javadoc in order to generate the documentation:
+  ant javadoc
+
+Project structure
+-----------------
+
+- build
+  This directory will only be created when the build task is executed. It
+  contains generated sources, compiled classes, and resources. This
+  directory can be deleted and will be recreated every time the ant build target
+  is executed.
+- doc
+  Documentation and presentations. This directory will be created if you execute
+  the javadoc ant task ('ant javadoc').
+- lib
+  Libraries needed in order to compile the application.
+  Note: Among other libraries, the directory contains the Axis 2 libraries which
+  are required for building the application. At runtime the application will use
+  the libraries of the Axis2 and not the libraries in this directory.
+- resources
+  Global resources, like WSDL web service description file, global Axis2
+  configuration file axis2.xml, web service configuration file services.xml, etc.
+- src
+  Java sources
+- test
+  Input and output testfiles.
+- README.txt
+  What you are reading.
+- build.properties
+  Ant build properties (edit the properties).
+- build.xml
+  Apache ant build file
+
+
+# Profiler
+## Benötigte Ressourcen
+Um den Profiler zu verwenden müssen folgende Daten vorhanden sein:
+   - Ein modernes Vollformenlexikon
+     - Ein Wort pro Zeile
+     - utf8 kodiert
+     - nur Kleinbuchstaben
+     - sortiert mit LC_ALL=C (nicht lexikographisch sortiert, sondern auf Ebene der Bytes)
+     - keine doppelten Einträge
+     - Befehl: 'export LC_ALL=C; sort in.txt | uniq > out.txt'
+   - Eine Patternliste mit den historischen Schreibvarianten
+     - utf8 kodiert
+     - nur Kleinbuchstaben
+     - Ein Pattern pro Zeile
+     - Die moderne Variante steht links, die historische rechts (neu:alt)
+     - mit '@' kann das Wortende bzw. der Wortanfang ausgedrückt werden (@t:@th)
+   - Ein Trainingskorpus mit historischen Schreibvarianten, um das anfängliche Sprachmodell zu berechnen
+   - Ein weiteres optionales Lexikon mit historischen Wörtern, die nicht über die historischen Pattern
+     erklärt werden können
+
+## Erstellung der benötigten Dateien
+
+### Lexikon
+In einem ersten Schritt muss das Lexikon kompiliert werden.
+Dieses kompilierte Lexikon wird dann von den anderen Programmen verwendet.
+
+Aufruf: compileFBDic infile outfile
+
+Das Tool compileFBDic ist Teil der csl Bibliothek 'svn://svn.cis.uni-muenchen.de/csl'
+
+### Erstellung einer Konfigurationsdatei
+Die Programme verwenden eine gemeinsame Konfigurationsdatei.
+Die Pfade der verschiedenen Ein- und Ausgabedateien müssen dann noch entsprechend angepasst werden.
+
+Aufruf: profiler --createConfigFile > file erzeugt
+
+Das Tool profiler ist Teil der OCRC_cxx Bibliothek und liegt auf diener unter:
+'/srv/www/tomcat/postcorrection_backend/OCRC_cxx'
+
+### Erstellung des Sprachmodells
+Bei der Erstellung des Sprachmodells werden die anfänglichen Gewichte der historischen Schreibvarianten
+berechnet. Dazu benötigt man das kompilierte moderne Vollformenlexikon aus dem vorherigen Schritt,
+einen historischen Trainingskorpus und die Patternliste mit den historischen Schreibvarianten.
+
+Es werden zwei Dateien erzeugt:
+  - weights.txt: enthält die Anfangsgewichte der historischen Pattern
+  - freqList.binfreq: enthält die kompilierte Frequenzliste des historischen Korpus
+
+NOTE: Die Erzeugung des Sprachmodells kann lange dauern.
+
+Aufruf: trainFrequencyList --config config.ini --textFile trainingskorpus
+
+Das Tool trainFrequencyList ist Teil der OCRC_cxx Bibliothek und liegt auf diener unter:
+'/srv/www/tomcat/postcorrection_backend/OCRC_cxx'
+
+### Erzeugung eines Profilers
+siehe Ulis Dokumentation
+
+DOKUMENTATION VON ULI (zum Teil veraltet)
+### Overview
+## Data preparation
+
+In this section we take care of the resources that are necessary to run the Profiler.
+
+The Profiler heavily depends on lexical resources.
+As will be explained below, the Profiler can be configured to use any number of different dictionaries;
+all of those have to be compiled into a binary format beforehands.
+
+The necessary tools for dictionary compilation come with the "csl" library (see the installation page).
+As part of the csl manual pages you will find a page called "FBDic Manual" which contains all necessary information on how to.
+
+needs: modern lexicon, one word per line, lower case!, utf-8
+sort using: export LC_ALL=C sort modern.lex1 > modern.lex
+<CSL_ROOT_DIR>/build/bin/compileFBDic modern.lex modern.fbdic
+
+## Preliminary step: *** training of initial language model from groundtruth historical text
+ - type-freq list
+ - initial weights for variant patterns
+ - list of "unexplained words" which are neither in the modern dict nor explained by pattern applications.
+### DO NOT USE THIS ####
+--> tool: trainFrequencyList ../bin/trainFrequencyList trainingscorpus.txt --modernDict modernLexicon.fbdic --patternFile patterns.txt
+needs: patterns.txt  # one pattern per line, space between left and right side
+modernDict.fbdic     # built by compileFBDic in the csl library
+trainingscorpus.txt  # plain utf-8
+
+produces:
+ - freqlist.binfrq # must be given to profiler
+ - weights.txt # must be given to profiler
+ - unexplained.fbdic # can be added as additional dictionary to the profiler
+
+Configuration *** ../bin/profiler --createConfigFile > your_config.ini
+
+execution ***
+../bin/profiler --config config.ini --sourceFormat DocXML --sourceFile ../../../exampleFiles/eckart_dir/abbyy_xml/bsb00001830_00017.xml --htmlOut out.html --xmlOut out.xml
+
+## Preparation of evaluation data *** needs:
+ - a dir OCR
+ - a dir GT
+ - empty dirs ALIGN_XML ALIGN_TXT
+align_ocr_dirs GT OCR ALIGN_XML for file in `ls ALIGN_XML/*xml`; do base=`basename $file .xml`; perl xml2list.pl $file > ALIGN_TXT/$base; done
+
+
+### INSTALLATION
+*** csl installation ***
+
+To compile the csl library and all command line tools, you need the build
+program 'cmake', which is part of virtually any linux distribution.
+
+Unpack the source tarball and change into its root directory. Then type:
+
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+make
+
+This should build the library in ./lib and all executables in ./bin .
+If cmake gives you trouble concerning the jni include directories, it might help
+to specify a correct JAVA_HOME environment variable:
+$ JAVA_HOME=/path/to/java/sdk  cmake #[...], see above
+$ JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/  cmake #[...], see above
+
+You can also try 'make install', but I don't guarantee I haven't forgotten
+to specify one or the other binary to be installed. It does install the
+library to CMAKE_INSTALL_PREFIX/lib and the more important programs to
+CMAKE_INSTALL_PREFIX/bin . CMAKE_INSTALL_PREFIX defaults to "/usr/local/", but
+you can use 'ccmake' to change the prefix.
+Just do
+
+cmake ..
+ccmake .  # only if you want to change paths. Just follow the help given in the program.
+make
+make install  # not very well tested
+
+Please report bugs, problems etc. to uli _at_ cis _dot_ uni-muenchen _dot_ de .
+
+### Files
+svn trunk: svn checkout svn:://svn.cis.uni-muenchen.de/csl/trunk
+full : svn checkout svn:://svn.cis.uni-muenchen.de/csl
+
+### Profiler installieren:
+@code
+$ mkdir build
+$ cd build
+$ cmake -DCSL_INCLUDE_DIR=<path-to-csl> -DCSL_LIBRARY=<path-to-csl-lib> ..
+@endcode
+
+### Important notes:
+ - Profiler benoetigt libxerces-c2-dev.deb (Ubuntu)
+ - sources of the ProfilerWebService can be found in the svn repository svn://svn.cis.uni-muenchen.de/ocr
+ - version of axis2 lib used to compile the ProfilerWebService must match the version of the axis2.war
+ - mysql db for usermanagement on suffix: 'mysql -hsuffix.cis.uni-muenchen.de -uvoblt -p' password is 'tvobl'
+   - use database ProfilerWebService
+   - show tables;
+   - ...
+ - profiler dir: postcorrection_backend/OCR_cxx
+ - profiler config dir: postcorrection_backend/OCRC_dictionaries
+ - languages:
+   - each language has its own subdir under postcorrection_backend/OCRC_dictionaries/
+   - each language subdir should contain the profiler files (weight.txt, corpusLexicon.fbds, freqlist.binfreq, modern.fbdic, patterns.txt).
+   - each language subdir needs a main configfile with the '.ini' extension.
+   - copy (or link) this ini file to the postcorrection_backend/OCRC_dictionaries/config_gui and
+     postcorrection_backend/OCRC_dictionaries/config_profiler directories.
+   - rename the file extension of the configfile to something else (e.g. ini.off) to disable the profiler for this language.
+
+Uwe:
+ - tomcat installieren.
+ - mysql installieren.
+ - JNI installieren
+ - download tomcat core distribution.
+ - auch tomcat-users, tomcat-admin packete.
+ - openjdk 1.7 mit tomcat 8.0.1
+ - dann auf /var/lib/tomcat/conf/tomcat-users.xml anpassen: wie unter 2).
+profiler befehl:
+         profile --config config --sourceFormat inputfile --sourceFile --out_doc out_doc --out_xml out_xml
+ <tomcat-users>
+        <role rolename="manager-gui"/>
+        <role rolename="manager-script"/>
+        <role rolename="admin-gui"/>
+        <role rolename="admin-script"/>
+        <user username="flo" password="ocr" roles="manager-gui,manager-script,admin-gui,admin-script"/>
+ </tomcat-users>
+ - sudo /etc/init.d/tomcat5 restart
+ - scp diener /srv/www/tomcat/axis2-1.5.1-war.zip
+ - scp diener /srv/www/tomcat/apache-tomcat-6.0.26/webapps/axis2/WEB-INF/conf/axis2.xml
+ - scp diener /srv/www/tomcat/apache-tomcat-6.0.26/webapps/axis2/WEB-INF/services/ProfilerWebService.aar
+ - scp diener /srv/www/tomcat/apache-tomcat-6.0.26/webapps/axis2/WEB-INF/conf/profiler.ini
+ - profiler.ini: variable backend_home anpassen
+ - scp diener /srv/www/tomcat/postocorrection_backend
+$ mkdir build
+$ cd build
+$ build OCRC_cxx: cmake -DCSL_INCLUDE_DIR=<path-to-csl-base-dri> -DCSL_LIBRARY=<path-to-csl-lib (build/lib/libcsl.so)> ..
+
+FEHLER:
+ - wenn profiler nicht existiert laeuft der service in einen endlosschleife.
+ - in den ini files: *WICHTIG* die Sektionnsnamen der Lexikoneinträge *müssen* mit 'dict_' beginnen.
+ - in den ini files: *WICHTIG* die Lexikoneinträge *müssen* mit active = true frei geschaltet werden.
+ - in den ini files: *WICHTIG* die Lexikoneinträge *müssen* einen dict_type = <dict_type> haben.
