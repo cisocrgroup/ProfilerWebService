@@ -294,11 +294,11 @@
     <part name="part1" element="tns:GetProfileRequest">
     </part>
   </message>
-  <message name="GetSimpleConfigurationsRequest">
-  </message>
   <message name="GetConfigurationsResponse">
     <part name="part1" element="tns:GetConfigurationsResponse">
     </part>
+  </message>
+  <message name="GetSimpleConfigurationsRequest">
   </message>
   <message name="ResendIDResponse">
     <part name="part1" element="tns:ResendIDResponse">

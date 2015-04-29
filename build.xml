@@ -112,19 +112,18 @@
     </target>
     <!-- custom -->
     <target name="config.file" depends="init">
-      <propertyfile file="${profiler.ini}"
-                    comment="profiler.ini" >
-        <entry key="backend_home" value="${backend.home}" />
-      </propertyfile>
+        <propertyfile file="${profiler.ini}" comment="profiler.ini">
+            <entry key="backend_home" value="${backend.home}"/>
+        </propertyfile>
     </target>
     <target name="start.apache">
-      <exec dir="." executable="${apache.home}/bin/startup.sh" />
+        <exec dir="." executable="${apache.home}/bin/startup.sh"/>
     </target>
     <target name="deploy.config" depends="config.file">
-      <copy file="${profiler.ini}" toDir="${apache.home}/webapps/axis2/WEB-INF/conf" />
+        <copy file="${profiler.ini}" toDir="${apache.home}/webapps/axis2/WEB-INF/conf"/>
     </target>
     <target name="deploy.aar" depends="jar.server">
-      <copy file="${lib}/${name}.aar" todir="${apache.home}/webapps/axis2/WEB-INF/services" />
+        <copy file="${lib}/${name}.aar" todir="${apache.home}/webapps/axis2/WEB-INF/services"/>
     </target>
-    <target name="deploy" depends="deploy.config,deploy.aar,start.apache" />
+    <target name="deploy" depends="deploy.config,deploy.aar,start.apache"/>
 </project>

@@ -33,7 +33,9 @@ import org.w3.www._2005._05.xmlmime.Base64Binary;
  */
 public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         private final String CONFIG_FILE = "/conf/profiler.ini";
+        private final static Logger logger = Logger.getLogger(ProfilerWebService.class.getName());
         private Backend backend;
+
         public ProfilerWebService() {
                 try {
                         backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
@@ -55,12 +57,22 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         public AbortProfilingResponse abortProfiling(AbortProfilingRequest x) {
                 return null;
         }
-        // get language ini files
+
         @Override
         public GetConfigurationsResponse getConfigurations() {
+                log(Level.INFO, "called getConfigurations()");
                 GetConfigurationsResponse response = new GetConfigurationsResponse();
-                return null;
+                GetConfigurationsResponseType type = new GetConfigurationsResponseType();
+                try {
+                        type.setConfigurations(backend.getLanguages());
+                } catch (BackendException e) {
+                        log(e);
+                        type = null;
+                }
+                response.setGetConfigurationsResponse(type);
+                return response;
         }
+
         @Override
         public StartSessionResponse startSession() {
                 return null;
@@ -71,7 +83,10 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         }
 
         private void log(Exception e) {
-                throw new RuntimeException("log not implemented yet");
+                logger.log(Level.SEVERE, e.getMessage());
+        }
+        private void log(Level level, String msg) {
+                logger.log(level, msg);
         }
 
         // old interface
