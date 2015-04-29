@@ -32,7 +32,76 @@ import org.w3.www._2005._05.xmlmime.Base64Binary;
  * @author thorsten (thorsten.vobl@googlemail.com)
  */
 public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSkeletonInterface {
+        private final String CONFIG_FILE = "/conf/profiler.ini";
+        private Backend backend;
+        public ProfilerWebService() {
+                try {
+                        backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
+                } catch (IOException e) {
+                        log(e);
+                }
+        }
 
+        // new interface
+        @Override
+        public GetProfilingStatusResponse getProfilingStatus(GetProfilingStatusRequest x) {
+                return null;
+        }
+        @Override
+        public GetProfileResponse getProfile(GetProfileRequest x) {
+                return null;
+        }
+        @Override
+        public AbortProfilingResponse abortProfiling(AbortProfilingRequest x) {
+                return null;
+        }
+        // get language ini files
+        @Override
+        public GetConfigurationsResponse getConfigurations() {
+                return null;
+        }
+        // ??
+        @Override
+        public GetSimpleConfigurationsResponse getSimpleConfigurations() {
+                return null;
+        }
+        @Override
+        public StartSessionResponse startSession() {
+                return null;
+        }
+        @Override
+        public SimpleEnrichResponse simpleEnrich(SimpleEnrichRequest x) {
+                return null;
+        }
+
+        private void log(Exception e) {
+                throw new RuntimeException("log not implemented yet");
+        }
+
+        // old interface
+        @Override
+        public CheckQuotaResponse checkQuota(CheckQuotaRequest x) {
+                return null;
+        }
+        @Override
+        public GetTransactionsResponse getTransactions(GetTransactionsRequest x) {
+                return null;
+        }
+        @Override
+        public ResendIDResponse resendID(ResendIDRequest x) {
+                return null;
+        }
+        @Override
+        public ValidateEmailResponse validateEmail(ValidateEmailRequest x) {
+                return null;
+        }
+        @Override
+        public CreateAccountResponse createAccount(CreateAccountRequest x) {
+                return null;
+        }
+}
+
+/*
     private Connection con = null;
     private Properties prop = null;
     private Properties mailprop = null;
@@ -1068,3 +1137,4 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         return ssr;
     }
 }
+*/
