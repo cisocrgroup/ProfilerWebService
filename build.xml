@@ -113,7 +113,7 @@
     </target>
 
     <!-- custom -->
-    <target name="config.file">
+    <target name="config.file" depends="init">
       <propertyfile file="${profiler.ini}"
                     comment="profiler.ini" >
         <entry key="backend_home" value="${backend.home}" />
