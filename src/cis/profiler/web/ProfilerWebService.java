@@ -35,6 +35,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         private final String CONFIG_FILE = "/conf/profiler.ini";
         private final static Logger logger = Logger.getLogger(ProfilerWebService.class.getName());
         private Backend backend;
+        private Profiler profiler = null;
 
         public ProfilerWebService() {
                 try {
@@ -53,16 +54,29 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 return null;
         }
         @Override
-        public GetProfileResponse getProfile(GetProfileRequest x) {
+        public GetProfileResponse getProfile(GetProfileRequest r) {
                 log(Level.INFO, "called getProfile()");
-                return null;
+                try {
+                        profiler = new Profiler(backend, ProfilerInputFile.fromRequest(r));
+                        log(Level.INFO, "profiler input: " +
+                            profiler.getInputFile().getCanonicalPath());
+                        log(Level.INFO, "profiler docout: " +
+                            profiler.getDocOutFile().getCanonicalPath());
+                        log(Level.INFO, "profiler profileout: " +
+                            profiler.getProfileOutFile().getCanonicalPath());
+                        log(Level.INFO, "profiler internal command: " +
+                            profiler.getCommand());
+                        profiler.run();
+                } catch (Exception e) {
+                        log(e);
+                }
+                return buildProfileResponse();
         }
         @Override
         public AbortProfilingResponse abortProfiling(AbortProfilingRequest x) {
                 log(Level.INFO, "called abortProfiling()");
                 return null;
         }
-
         @Override
         public GetConfigurationsResponse getConfigurations() {
                 log(Level.INFO, "called getConfigurations()");
@@ -79,7 +93,6 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 response.setGetConfigurationsResponse(type);
                 return response;
         }
-
         @Override
         public StartSessionResponse startSession() {
                 log(Level.INFO, "called startSession()");
@@ -91,12 +104,55 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 return null;
         }
 
+        private AttachmentType buildProfileAttachment(File file) {
+                assert(file != null);
+                AttachmentType att = new AttachmentType();
+                Base64Binary bin = new Base64Binary();
+                bin.setBase64Binary(new DataHandler(new FileDataSource(file)));
+                att.setBinaryData(bin);
+                return att;
+        }
+
+        private GetProfileResponse buildErrorProfileResponse() {
+                assert(profiler != null);
+                GetProfileResponseType rt = new GetProfileResponseType();
+                rt.setDoc_out_size(0);
+                rt.setDoc_out(new AttachmentType());
+                rt.setProfile_out_size(0);
+                rt.setProfile_out(new AttachmentType());
+                rt.setQuota_left(100);
+                rt.setMessage(profiler.getStatus().getMessage());
+                rt.setReturncode(-1);
+                GetProfileResponse r = new GetProfileResponse();
+                r.setGetProfileResponse(rt);
+                return r;
+        }
+
+        private GetProfileResponse buildProfileResponse() {
+                assert(profiler != null);
+                if (! profiler.getStatus().isOk())
+                        return buildErrorProfileResponse();
+                GetProfileResponseType rt = new GetProfileResponseType();
+                rt.setDoc_out_size(profiler.getDocOutFile().length());
+                rt.setDoc_out(buildProfileAttachment(profiler.getDocOutFile()));
+                rt.setProfile_out_size(profiler.getProfileOutFile().length());
+                rt.setProfile_out(buildProfileAttachment(profiler.getProfileOutFile()));
+                rt.setQuota_left(100);
+                rt.setMessage(profiler.getStatus().getMessage());
+                rt.setReturncode(0);
+                GetProfileResponse r = new GetProfileResponse();
+                r.setGetProfileResponse(rt);
+                return r;
+        }
+
         private void log(Exception e) {
                 logger.log(Level.SEVERE, e.getMessage());
         }
+
         private void log(Level level, String msg) {
                 logger.log(level, msg);
         }
+
         private void logBackend() {
                 try {
                         log(Level.INFO, ProfilerWebService.class.getName() + " created");

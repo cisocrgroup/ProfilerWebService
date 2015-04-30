@@ -88,17 +88,17 @@ class Profiler {
                 public boolean isOk() {
                         return true;
                 }
-                public abstract String getStatus();
+                public abstract String getMessage();
         }
         private class StatusNotStarted extends Status {
                 @Override
-                public String getStatus() {
+                public String getMessage() {
                         return "Not started";
                 }
         }
         private class StatusProfiling extends Status {
                 @Override
-                public String getStatus() {
+                public String getMessage() {
                         return "Profiling";
                 }
         }
@@ -112,7 +112,7 @@ class Profiler {
                         return status == 0;
                 }
                 @Override
-                public String getStatus() {
+                public String getMessage() {
                         String res = "Finished profiling";
                         if (! isOk()) {
                                 res = "Internal profiler error: " +
@@ -123,7 +123,7 @@ class Profiler {
         }
         private class StatusUploading extends Status {
                 @Override
-                public String getStatus() {
+                public String getMessage() {
                         return "Uploading";
                 }
         }
@@ -137,7 +137,7 @@ class Profiler {
                         return false;
                 }
                 @Override
-                public String getStatus() {
+                public String getMessage() {
                         return "Error: " + error;
                 }
         }
