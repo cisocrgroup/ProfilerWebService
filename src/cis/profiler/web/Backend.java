@@ -29,7 +29,9 @@ class Backend {
                 assert(exe != null);
                 return exe;
         }
-
+        public String getConfiguration(String language) {
+                return language + ".ini";
+        }
         public String[] getLanguages() throws BackendException {
                 ArrayList<String> languages  = new ArrayList();
                 File backendDir = getBackendDir();

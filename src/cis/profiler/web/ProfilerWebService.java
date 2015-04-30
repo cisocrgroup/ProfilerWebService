@@ -28,8 +28,8 @@ import org.apache.axis2.wsdl.WSDLConstants;
 import org.w3.www._2005._05.xmlmime.Base64Binary;
 
 /**
- *
  * @author thorsten (thorsten.vobl@googlemail.com)
+ * @author flo (flo@cis.lmu.de)
  */
 public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         private final String CONFIG_FILE = "/conf/profiler.ini";
@@ -66,8 +66,10 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         @Override
         public GetConfigurationsResponse getConfigurations() {
                 log(Level.INFO, "called getConfigurations()");
-                GetConfigurationsResponse response = new GetConfigurationsResponse();
-                GetConfigurationsResponseType type = new GetConfigurationsResponseType();
+                GetConfigurationsResponse response =
+                        new GetConfigurationsResponse();
+                GetConfigurationsResponseType type =
+                        new GetConfigurationsResponseType();
                 try {
                         type.setConfigurations(backend.getLanguages());
                 } catch (BackendException e) {
