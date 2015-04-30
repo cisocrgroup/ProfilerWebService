@@ -91,7 +91,17 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         @Override
         public AbortProfilingResponse abortProfiling(AbortProfilingRequest x) {
                 log(Level.INFO, "called abortProfiling()");
-                return null;
+                AbortProfilingResponse r = new AbortProfilingResponse();
+                AbortProfilingResponseType rt = new AbortProfilingResponseType();
+                if (profiler != null) {
+                        profiler.abort();
+                        rt.setMessage("aborted");
+                } else {
+                        rt.setMessage("not profiling");
+                }
+                rt.setReturncode(0);
+                r.setAbortProfilingResponse(rt);
+                return r;
         }
         @Override
         public GetConfigurationsResponse getConfigurations() {

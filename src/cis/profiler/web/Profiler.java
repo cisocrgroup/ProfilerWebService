@@ -43,7 +43,12 @@ class Profiler {
                         throw e;
                 }
         }
-
+        public void abort() {
+                process.destroy();
+                infile.delete();
+                docout.delete();
+                profileout.delete();
+        }
         public File getDocOutFile() {
                 return docout;
         }
