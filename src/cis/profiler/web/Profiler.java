@@ -44,7 +44,7 @@ class Profiler {
                 }
         }
 
-        public File getDocoutFile() {
+        public File getDocOutFile() {
                 return docout;
         }
         public File getProfileOutFile() {
@@ -113,7 +113,12 @@ class Profiler {
                 }
                 @Override
                 public String getStatus() {
-                        return "Finished profiling";
+                        String res = "Finished profiling";
+                        if (! isOk()) {
+                                res = "Internal profiler error: " +
+                                        Integer.toString(status);
+                        }
+                        return res;
                 }
         }
         private class StatusUploading extends Status {
