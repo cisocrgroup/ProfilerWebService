@@ -96,24 +96,29 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         @Override
         public GetConfigurationsResponse getConfigurations() {
                 log(Level.INFO, "called getConfigurations()");
-                GetConfigurationsResponse response =
+                GetConfigurationsResponse r =
                         new GetConfigurationsResponse();
-                GetConfigurationsResponseType type =
+                GetConfigurationsResponseType rt =
                         new GetConfigurationsResponseType();
                 try {
-                        type.setConfigurations(backend.getLanguages());
+                        rt.setConfigurations(backend.getLanguages());
                 } catch (BackendException e) {
                         log(e);
-                        type = null;
+                        rt = null;
                 }
-                response.setGetConfigurationsResponse(type);
-                return response;
+                r.setGetConfigurationsResponse(rt);
+                return r;
         }
         @Override
         public StartSessionResponse startSession() {
                 log(Level.INFO, "called startSession()");
-                return null;
+                StartSessionResponse r = new StartSessionResponse();
+                StartSessionResponseType rt = new StartSessionResponseType();
+                rt.setReturncode(0);
+                r.setStartSessionResponse(rt);
+                return r;
         }
+
         @Override
         public SimpleEnrichResponse simpleEnrich(SimpleEnrichRequest x) {
                 log(Level.INFO, "called simpleEnrich()");
