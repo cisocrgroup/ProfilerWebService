@@ -51,7 +51,23 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         @Override
         public GetProfilingStatusResponse getProfilingStatus(GetProfilingStatusRequest x) {
                 log(Level.INFO, "called getProfilingStatus()");
-                return null;
+                GetProfilingStatusResponse r =
+                        new GetProfilingStatusResponse();
+                GetProfilingStatusResponseType rt =
+                        new GetProfilingStatusResponseType();
+                if (profiler != null) {
+                        rt.setReturncode(0);
+                        rt.setMessage(profiler.getStatus().getMessage());
+                        rt.setStatus(profiler.getStatus().getMessage());
+                        rt.setAdditional(profiler.getStatus().getMessage());
+                } else {
+                        rt.setReturncode(-1);
+                        rt.setMessage("not profiling");
+                        rt.setStatus("not profiling");
+                        rt.setAdditional("not profiling");
+                }
+                r.setGetProfilingStatusResponse(rt);
+                return r;
         }
         @Override
         public GetProfileResponse getProfile(GetProfileRequest r) {
