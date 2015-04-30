@@ -64,7 +64,7 @@ $(PROFILER_SKELETON): build.xml
 
 deploy: do-deploy restart-apache
 
-do-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR)
+do-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
 	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/conf
 	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/services
 	$(CP) $(AXIS2_WAR) $(APACHE)/webapps/
@@ -74,6 +74,10 @@ do-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR)
 restart-apache: do-deploy
 	$(APACHE)/bin/shutdown.sh
 	$(APACHE)/bin/startup.sh
+
+backend:
+#	git submodule update --init --recursive gsm/ressources
+	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/ressources backend
 
 # HELPER
 mkdir-%: dir = $(subst -,/,$*)
