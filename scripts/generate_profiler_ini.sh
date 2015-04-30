@@ -14,5 +14,5 @@ username = pws
 password = pws1314
 default_quota = 100
 backend_home = /mounts/Users/student/finkf/uni/profiler/tomcat/postcorrection_backend
-
+backend = /home/flo/devel/clarin-ressources/backend
 EOF

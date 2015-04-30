@@ -33,7 +33,7 @@ default: $(PROFILER_AAR)
 # -or: override
 # -ssi service-interface
 build.xml: $(WSDL) $(WSDL2JAVA)
-	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -scn ProfilerWebService
+	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -scn ProfilerWebService
 
 $(PROFILER_AAR): build.xml $(wildcard src/cis/profiler/web/*.java)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
