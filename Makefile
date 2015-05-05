@@ -28,7 +28,7 @@ JAR ?= jar
 CP ?= cp
 
 # DEFAULT
-default: $(PROFILER_AAR)
+default: deploy
 
 # -ss: server-side
 # -sd: service-description
