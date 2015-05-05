@@ -76,8 +76,7 @@ restart-apache: do-deploy
 	$(APACHE)/bin/startup.sh
 
 backend:
-#	git submodule update --init --recursive gsm/ressources
-	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/ressources backend
+	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
 
 # HELPER
 mkdir-%: dir = $(subst -,/,$*)
