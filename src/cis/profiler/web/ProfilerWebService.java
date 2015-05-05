@@ -28,11 +28,209 @@ import org.apache.axis2.wsdl.WSDLConstants;
 import org.w3.www._2005._05.xmlmime.Base64Binary;
 
 /**
- *
  * @author thorsten (thorsten.vobl@googlemail.com)
+ * @author flo (flo@cis.lmu.de)
  */
-public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSkeletonInterface {
+public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
+        private final String CONFIG_FILE = "/conf/profiler.ini";
+        private final static Logger logger = Logger.getLogger(ProfilerWebService.class.getName());
+        private Backend backend;
+        private Profiler profiler = null;
 
+        public ProfilerWebService() {
+                try {
+                        backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
+                        logBackend();
+                } catch (IOException e) {
+                        log(e);
+                        throw new RuntimeException(e);
+                }
+        }
+
+        // new interface
+        @Override
+        public GetProfilingStatusResponse getProfilingStatus(GetProfilingStatusRequest x) {
+                log(Level.INFO, "called getProfilingStatus()");
+                GetProfilingStatusResponse r =
+                        new GetProfilingStatusResponse();
+                GetProfilingStatusResponseType rt =
+                        new GetProfilingStatusResponseType();
+                if (profiler != null) {
+                        rt.setReturncode(0);
+                        rt.setMessage(profiler.getStatus().getMessage());
+                        rt.setStatus(profiler.getStatus().getMessage());
+                        rt.setAdditional(profiler.getStatus().getMessage());
+                } else {
+                        rt.setReturncode(-1);
+                        rt.setMessage("not profiling");
+                        rt.setStatus("not profiling");
+                        rt.setAdditional("not profiling");
+                }
+                r.setGetProfilingStatusResponse(rt);
+                return r;
+        }
+        @Override
+        public GetProfileResponse getProfile(GetProfileRequest r) {
+                log(Level.INFO, "called getProfile()");
+                try {
+                        profiler = new Profiler(backend, ProfilerInputFile.fromRequest(r));
+                        log(Level.INFO, "profiler input: " +
+                            profiler.getInputFile().getCanonicalPath());
+                        log(Level.INFO, "profiler docout: " +
+                            profiler.getDocOutFile().getCanonicalPath());
+                        log(Level.INFO, "profiler profileout: " +
+                            profiler.getProfileOutFile().getCanonicalPath());
+                        log(Level.INFO, "profiler internal command: " +
+                            profiler.getCommand());
+                        profiler.run();
+                } catch (Exception e) {
+                        log(e);
+                }
+                return buildProfileResponse();
+        }
+        @Override
+        public AbortProfilingResponse abortProfiling(AbortProfilingRequest x) {
+                log(Level.INFO, "called abortProfiling()");
+                AbortProfilingResponse r = new AbortProfilingResponse();
+                AbortProfilingResponseType rt = new AbortProfilingResponseType();
+                if (profiler != null) {
+                        profiler.abort();
+                        rt.setMessage("aborted");
+                } else {
+                        rt.setMessage("not profiling");
+                }
+                rt.setReturncode(0);
+                r.setAbortProfilingResponse(rt);
+                return r;
+        }
+        @Override
+        public GetConfigurationsResponse getConfigurations() {
+                log(Level.INFO, "called getConfigurations()");
+                GetConfigurationsResponse r =
+                        new GetConfigurationsResponse();
+                GetConfigurationsResponseType rt =
+                        new GetConfigurationsResponseType();
+                try {
+                        rt.setConfigurations(backend.getLanguages());
+                } catch (BackendException e) {
+                        log(e);
+                        rt = null;
+                }
+                r.setGetConfigurationsResponse(rt);
+                return r;
+        }
+        @Override
+        public StartSessionResponse startSession() {
+                log(Level.INFO, "called startSession()");
+                StartSessionResponse r = new StartSessionResponse();
+                StartSessionResponseType rt = new StartSessionResponseType();
+                rt.setReturncode(0);
+                r.setStartSessionResponse(rt);
+                return r;
+        }
+
+        @Override
+        public SimpleEnrichResponse simpleEnrich(SimpleEnrichRequest x) {
+                log(Level.INFO, "called simpleEnrich()");
+                return null;
+        }
+
+        private AttachmentType buildProfileAttachment(File file) {
+                assert(file != null);
+                AttachmentType att = new AttachmentType();
+                Base64Binary bin = new Base64Binary();
+                bin.setBase64Binary(new DataHandler(new FileDataSource(file)));
+                att.setBinaryData(bin);
+                return att;
+        }
+
+        private GetProfileResponse buildErrorProfileResponse() {
+                assert(profiler != null);
+                GetProfileResponseType rt = new GetProfileResponseType();
+                rt.setDoc_out_size(0);
+                rt.setDoc_out(new AttachmentType());
+                rt.setProfile_out_size(0);
+                rt.setProfile_out(new AttachmentType());
+                rt.setQuota_left(100);
+                rt.setMessage(profiler.getStatus().getMessage());
+                rt.setReturncode(-1);
+                GetProfileResponse r = new GetProfileResponse();
+                r.setGetProfileResponse(rt);
+                return r;
+        }
+
+        private GetProfileResponse buildProfileResponse() {
+                assert(profiler != null);
+                if (! profiler.getStatus().isOk())
+                        return buildErrorProfileResponse();
+                GetProfileResponseType rt = new GetProfileResponseType();
+                rt.setDoc_out_size(profiler.getDocOutFile().length());
+                rt.setDoc_out(buildProfileAttachment(profiler.getDocOutFile()));
+                rt.setProfile_out_size(profiler.getProfileOutFile().length());
+                rt.setProfile_out(buildProfileAttachment(profiler.getProfileOutFile()));
+                rt.setQuota_left(100);
+                rt.setMessage(profiler.getStatus().getMessage());
+                rt.setReturncode(0);
+                GetProfileResponse r = new GetProfileResponse();
+                r.setGetProfileResponse(rt);
+                return r;
+        }
+
+        private void log(Exception e) {
+                logger.log(Level.SEVERE, e.getMessage());
+        }
+
+        private void log(Level level, String msg) {
+                logger.log(level, msg);
+        }
+
+        private void logBackend() {
+                try {
+                        log(Level.INFO, ProfilerWebService.class.getName() + " created");
+                        log(Level.INFO, "backend:  " + backend.getBackendDir().getPath());
+                        log(Level.INFO, "profiler: " + backend.getProfilerExe().getPath());
+                        for (String language: backend.getLanguages())
+                                log(Level.INFO, "language: " + language);
+                } catch (BackendException e) {
+                        log(e);
+                }
+        }
+
+        // old interface
+        @Override
+        public CheckQuotaResponse checkQuota(CheckQuotaRequest x) {
+                log(Level.SEVERE, "called checkQuota()");
+                return null;
+        }
+        @Override
+        public GetTransactionsResponse getTransactions(GetTransactionsRequest x) {
+                log(Level.SEVERE, "called getTransactions()");
+                return null;
+        }
+        @Override
+        public ResendIDResponse resendID(ResendIDRequest x) {
+                log(Level.SEVERE, "called resendID()");
+                return null;
+        }
+        @Override
+        public ValidateEmailResponse validateEmail(ValidateEmailRequest x) {
+                log(Level.SEVERE, "called validateEmail()");
+                return null;
+        }
+        @Override
+        public CreateAccountResponse createAccount(CreateAccountRequest x) {
+                log(Level.SEVERE, "called createAccount()");
+                return null;
+        }
+        // ??
+        @Override
+        public GetSimpleConfigurationsResponse getSimpleConfigurations() {
+                log(Level.SEVERE, "called getSimpleConfigurations()");
+                return null;
+        }
+}
+
+/*
     private Connection con = null;
     private Properties prop = null;
     private Properties mailprop = null;
@@ -110,7 +308,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         }
         Logger.getLogger(ProfilerWebService.class.getName()).log(Level.INFO, msg);
     }
-    
+
     private void log(Exception e) {
          try {
             if (o != null) {
@@ -122,13 +320,13 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         }
         Logger.getLogger(ProfilerWebService.class.getName()).log(Level.SEVERE, null, e);
     }
-    
+
     private String getDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
     }
-    
+
     private Connection connect() throws ClassNotFoundException, SQLException {
         String dbUrl = prop.getProperty("dbURL");
         String username = prop.getProperty("username");
@@ -138,7 +336,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         Class.forName("com.mysql.jdbc.Driver");
         return DriverManager.getConnection(dbUrl, username, password);
     }
-    
+
     private void close(Connection connection) {
         try {
             if (connection != null) {
@@ -148,8 +346,8 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
             log(e);
         }
     }
-    
-    
+
+
     private void insertTransactionInfo(Connection c, String userid, String ip, String docinfo, String profname, String profinfo) throws SQLException {
         Statement s = c.createStatement();
         String sqlstr = "INSERT INTO transactions (userid, ipaddress, docname, docinfos, profname, profilerinfos) VALUES (\"" +
@@ -157,11 +355,11 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         log("sqlstr: " + sqlstr);
         s.executeUpdate(sqlstr);
     }
-    
+
     private String getDocname() {
         return tempfile.getName() + " # " + doc_out.getName() + " # " + log.getName();
     }
-    
+
     @Override
     public ResendIDResponse resendID(ResendIDRequest resendIDRequest) {
         ResendIDResponse resp = new ResendIDResponse();
@@ -506,7 +704,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         }
         return str.toString();
     }
-    
+
     @Override
     public GetProfileResponse getProfile(GetProfileRequest getProfileRequest) {
         GetProfileResponse resp = new GetProfileResponse();
@@ -557,7 +755,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
                 if( inputType.equals(FileType.DOCXML.toString())) {
                     tempfile = File.createTempFile("doc_", ".xml");
                 } else if( inputType.equals(FileType.TXT.toString())) {
-                    tempfile = File.createTempFile("doc_", ".txt");                    
+                    tempfile = File.createTempFile("doc_", ".txt");
                 } else {
                     rst.setDoc_out(new AttachmentType());
                     rst.setProfile_out(new AttachmentType());
@@ -568,9 +766,9 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
                     rst.setMessage("unknown inputtype");
                     rst.setReturncode(-1);
                     resp.setGetProfileResponse(rst);
-                    return resp;                    
+                    return resp;
                 }
-                
+
                 FileOutputStream out = new FileOutputStream(tempfile);
                 InputStream in = dh.getInputStream();
 
@@ -632,9 +830,9 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
                 status = "profiling";
 
                 p = b.start();
-                
+
                 insertTransactionInfo(con, rqt.getUserid(), ip, "", "", "");
-                
+
                 log("profiling started");
                 //o.write("profiling started " + System.currentTimeMillis() + "\n");
                 //o.flush();
@@ -674,7 +872,7 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
 
                 this.isProfiling = false;
 //                int retval = p.exitValue();
-//                                
+//
 //                o.write("Profiling done, retval= "+ retval);
 //                o.flush();
 //
@@ -1068,3 +1266,4 @@ public class ProfilerWebService implements cis.profiler.web.ProfilerWebServiceSk
         return ssr;
     }
 }
+*/

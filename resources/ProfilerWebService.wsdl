@@ -18,7 +18,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="ResendIDRequest" type="tns:ResendIDRequestType"/> 
+			<xsd:element name="ResendIDRequest" type="tns:ResendIDRequestType"/>
 
 			<xsd:complexType name="ResendIDResponseType">
 				<xsd:sequence>
@@ -27,7 +27,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="ResendIDResponse" type="tns:ResendIDResponseType"/> 
+			<xsd:element name="ResendIDResponse" type="tns:ResendIDResponseType"/>
 
 
 			<xsd:complexType name="GetConfigurationsResponseType">
@@ -36,7 +36,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="GetConfigurationsResponse" type="tns:GetConfigurationsResponseType"/> 
+			<xsd:element name="GetConfigurationsResponse" type="tns:GetConfigurationsResponseType"/>
 
 			<xsd:complexType name="GetSimpleConfigurationsResponseType">
 				<xsd:sequence>
@@ -44,7 +44,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="GetSimpleConfigurationsResponse" type="tns:GetSimpleConfigurationsResponseType"/> 
+			<xsd:element name="GetSimpleConfigurationsResponse" type="tns:GetSimpleConfigurationsResponseType"/>
 
 
 			<xsd:complexType name="GetTransactionsRequestType">
@@ -53,18 +53,18 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="GetTransactionsRequest" type="tns:GetTransactionsRequestType"/> 
+			<xsd:element name="GetTransactionsRequest" type="tns:GetTransactionsRequestType"/>
 
 
 			<xsd:complexType name="GetTransactionsResponseType">
-				<xsd:sequence>					
+				<xsd:sequence>
 					<xsd:element name="returncode" type="xsd:int"/>
 					<xsd:element name="message" type="xsd:string"/>
 					<xsd:element maxOccurs="unbounded" minOccurs="0" name="transactions" type="xsd:string"/>
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="GetTransactionsResponse" type="tns:GetTransactionsResponseType"/> 
+			<xsd:element name="GetTransactionsResponse" type="tns:GetTransactionsResponseType"/>
 
 
 			<xsd:complexType name="CreateAccountRequestType">
@@ -75,7 +75,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="CreateAccountRequest" type="tns:CreateAccountRequestType"/> 
+			<xsd:element name="CreateAccountRequest" type="tns:CreateAccountRequestType"/>
 
 
 			<xsd:complexType name="CreateAccountResponseType">
@@ -85,27 +85,27 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="CreateAccountResponse" type="tns:CreateAccountResponseType"/> 
-	
+			<xsd:element name="CreateAccountResponse" type="tns:CreateAccountResponseType"/>
+
 
 			<xsd:complexType name="CheckQuotaRequestType">
-				<xsd:sequence>					
+				<xsd:sequence>
 					<xsd:element name="userid" type="xsd:string"/>
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="CheckQuotaRequest" type="tns:CheckQuotaRequestType"/> 
+			<xsd:element name="CheckQuotaRequest" type="tns:CheckQuotaRequestType"/>
 
 
 			<xsd:complexType name="CheckQuotaResponseType">
-				<xsd:sequence>					
+				<xsd:sequence>
 					<xsd:element name="returncode" type="xsd:int"/>
 					<xsd:element name="message" type="xsd:string"/>
 					<xsd:element name="quota" type="xsd:int"/>
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="CheckQuotaResponse" type="tns:CheckQuotaResponseType"/> 
+			<xsd:element name="CheckQuotaResponse" type="tns:CheckQuotaResponseType"/>
 
 
 			<xsd:complexType name="SimpleEnrichRequestType">
@@ -117,8 +117,8 @@
 			</xsd:complexType>
 
 			<xsd:element name="SimpleEnrichRequest" type="tns:SimpleEnrichRequestType"/>
-			
-			
+
+
 			<xsd:complexType name="SimpleEnrichResponseType">
 				<xsd:sequence>
 					<xsd:element name="returncode" type="xsd:int"/>
@@ -129,7 +129,7 @@
 			</xsd:complexType>
 
 			<xsd:element name="SimpleEnrichResponse" type="tns:SimpleEnrichResponseType"/>
-			
+
 
 			<xsd:complexType name="GetProfileRequestType">
 				<xsd:sequence>
@@ -141,7 +141,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="GetProfileRequest" type="tns:GetProfileRequestType"/> 
+			<xsd:element name="GetProfileRequest" type="tns:GetProfileRequestType"/>
 
 
 			<xsd:complexType name="GetProfileResponseType">
@@ -165,7 +165,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="GetProfilingStatusRequest" type="tns:GetProfilingStatusRequestType"/> 
+			<xsd:element name="GetProfilingStatusRequest" type="tns:GetProfilingStatusRequestType"/>
 
 
 			<xsd:complexType name="GetProfilingStatusResponseType">
@@ -186,7 +186,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="ValidateEmailRequest" type="tns:ValidateEmailRequestType"/> 
+			<xsd:element name="ValidateEmailRequest" type="tns:ValidateEmailRequestType"/>
 
 
 			<xsd:complexType name="ValidateEmailResponseType">
@@ -217,7 +217,7 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:element name="AbortProfilingRequest" type="tns:AbortProfilingRequestType"/> 
+			<xsd:element name="AbortProfilingRequest" type="tns:AbortProfilingRequestType"/>
 
 
 			<xsd:complexType name="AbortProfilingResponseType">

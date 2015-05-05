@@ -4,9 +4,9 @@
 <serviceGroup>
     <service name="ProfilerWebService">
         <messageReceivers>
-            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="de.uni_muenchen.cis.www.profiler.ProfilerWebServiceMessageReceiverInOut"/>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="cis.profiler.web.ProfilerWebServiceMessageReceiverInOut"/>
         </messageReceivers>
-        <parameter name="ServiceClass">de.uni_muenchen.cis.www.profiler.ProfilerWebServiceSkeleton</parameter>
+        <parameter name="ServiceClass">cis.profiler.web.ProfilerWebServiceSkeleton</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
         <operation name="simpleEnrich" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://www.cis.uni-muenchen.de/profiler/">

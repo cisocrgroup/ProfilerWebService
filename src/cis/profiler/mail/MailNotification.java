@@ -1,6 +1,5 @@
 package cis.profiler.mail;
 
-import cis.profiler.web.ProfilerWebService;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,14 +9,14 @@ import javax.mail.internet.MimeMessage;
 
 /**
  * To send email notifications
- * 
+ *
  * @author Raminderjeet Singh
  */
 public class MailNotification {
 
 	/**
 	 * Send Email
-	 * 
+	 *
 	 * @param mailServer
 	 * @param senderEmail
 	 * @param senderMailPassword
@@ -29,12 +28,12 @@ public class MailNotification {
 	 */
 	public void sendMail(String mailServer, String senderEmail, String senderMailPassword, String recipients[],
 			String subject, String message, boolean debug) throws MessagingException {
-            
+
                 log("Subject: " + subject);
                 log("MailServer: " + mailServer);
                 log("SenderEmail: " + senderEmail);
                 log("Message: " + message);
-                
+
 		// Set the host smtp address
 		Properties props = new Properties();
 		props.put("mail.smtp.host", mailServer);
@@ -52,13 +51,13 @@ public class MailNotification {
 
 		// Required to avoid security exception.
 		MyAuthenticator authentication = new MyAuthenticator(senderEmail, senderMailPassword);
-                Session session = Session.getInstance(props, authentication);                
+                Session session = Session.getInstance(props, authentication);
 		session.setDebug(debug);
 		// create some properties and get the default Session
 
 		// create a message
 		MimeMessage msg = new MimeMessage(session);
-		
+
 		// set the from and to address
 		InternetAddress addressFrom = new InternetAddress(senderEmail);
 		msg.setFrom(addressFrom);
@@ -85,7 +84,7 @@ public class MailNotification {
         private static void log(String msg) {
             Logger.getLogger(MailNotification.class.getName()).log(Level.INFO, null, msg);
         }
-        
+
 	public static void main(String[] args) {
 		try {
 			String[] emails = { "thorsten.vobl@gmail.com" };
