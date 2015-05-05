@@ -3,8 +3,10 @@
 #
 
 APACHE ?= $(HOME)/uni/profiler/tomcat/apache-tomcat-8.0.0-RC5
+PROFILER_BACKEND ?= $(APACHE)/../backend
 
 AXIS2 = axis2-1.6.2
+AXIS2_WAR = var/$(AXIS2)-war/axis2.war
 AXIS2_HOME = var/$(AXIS2)
 WSDL2JAVA = $(AXIS2_HOME)/bin/wsdl2java.sh
 ANT_OPTS = -Dbuild.sysclasspath=ignore
@@ -42,27 +44,39 @@ var/$(AXIS2).zip:
 	@$(MKDIR) -p var
 	wget -O$@ http://mirror.nexcess.net/apache/axis/axis2/java/core/1.6.2/$(AXIS2)-bin.zip
 
+var/$(AXIS2)-war.zip:
+	@$(MKDIR) -p var
+	wget -O$@ http://mirror.nexcess.net/apache/axis/axis2/java/core/1.6.2/$(AXIS2)-war.zip
+
 $(WSDL2JAVA): var/$(AXIS2).zip
-	unzip -d var $<
+	unzip -d var -u $<
+	touch $@
+$(AXIS2_WAR): var/$(AXIS2)-war.zip
+	unzip -d $(dir $@) -u $<
 	touch $@
 
 $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
-	$< $@
+	$< $@ $(PROFILER_BACKEND)
+
 $(PROFILER_SKELETON): build.xml
 	scripts/generate_profiler_skeleton.sh $@
 
 deploy: do-deploy restart-apache
 
-do-deploy: $(PROFILER_AAR) $(PROFILER_INI)
+do-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
 	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/conf
 	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/services
+	$(CP) $(AXIS2_WAR) $(APACHE)/webapps/
 	$(CP) $(PROFILER_INI) $(APACHE)/webapps/axis2/WEB-INF/conf
 	$(CP) $(PROFILER_AAR) $(APACHE)/webapps/axis2/WEB-INF/services
 
 restart-apache: do-deploy
 	$(APACHE)/bin/shutdown.sh
 	$(APACHE)/bin/startup.sh
+
+backend:
+	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
 
 # HELPER
 mkdir-%: dir = $(subst -,/,$*)
