@@ -20,6 +20,9 @@ PROFILER_INI = $(PROFILER_CONF_DIR)/profiler.ini
 SERVICES_XML = resources/services.xml
 WSDL = resources/ProfilerWebService.wsdl
 PROFILER_SKELETON = src/cis/profiler/web/ProfilerWebServiceSkeleton.java
+HOST ?= http://localhost
+PORT ?= 8080
+TEST_HOST ?= $(HOST):$(PORT)
 
 # TOOLS
 ANT ?= ant
@@ -78,6 +81,16 @@ restart-apache: do-deploy
 backend:
 	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
 
+.PHONY: test
+test: test-wsdl
+
+.PHONY: test-wsdl #test-service-GetConfigurations
+test-wsdl: test-wsdl-GetConfigurations test-wsdl-GetProfile test-wsdl-GetProfilingStatus
+
+test-wsdl-%:
+	curl -# $(TEST_HOST)/axis2/services/ProfilerWebService?wsdl 2> /dev/null | grep $* > /dev/null
+
+#test-service-GetConfiguration:
 # HELPER
 mkdir-%: dir = $(subst -,/,$*)
 mkdir-%:
