@@ -83,14 +83,20 @@ backend:
 	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
 
 .PHONY: test
-test: test-wsdl
+test: test-wsdl test-getConfigurations
 
 .PHONY: test-wsdl #test-service-GetConfigurations
 test-wsdl: test-wsdl-GetConfigurations test-wsdl-GetProfile test-wsdl-GetProfilingStatus
 
 test-wsdl-%:
 	curl -# $(PWS_URL)?wsdl 2> /dev/null | grep $* > /dev/null
-
+test-getConfigurations: \
+	test-getConfigurations-latin \
+	test-getConfigurations-polish \
+	test-getConfigurations-greek \
+	test-getConfigurations-german
+test-getConfigurations-%:
+	curl -# $(PWS_URL)/getConfigurations 2> /dev/null | grep $* > /dev/null
 #test-service-GetConfiguration:
 
 .PHONY: clean
