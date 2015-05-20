@@ -36,7 +36,7 @@ The make process
    * builds the profiler
    * generates the language resources
    * installs the language ressources and the profiler into the language backend
-   * installs the both the `axis2` service and the `ProfilerWebService`
+   * installs both the `axis2` service and the `ProfilerWebService`
    * restarts apache (*Note: Im not shure if this step is required*)
 7. After the build process has finished succesfully,
 you can check the ProfilerWebService using `$ make test`.
