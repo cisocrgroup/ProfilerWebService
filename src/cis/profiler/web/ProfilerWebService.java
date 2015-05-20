@@ -39,6 +39,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
 
         public ProfilerWebService() {
                 try {
+                        logger.log(Level.INFO, ("CONFIG_FILE: " + CONFIG_FILE));
                         backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
                         logBackend();
                 } catch (IOException e) {
