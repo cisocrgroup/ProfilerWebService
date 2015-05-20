@@ -2,8 +2,8 @@
 # Makefile
 #
 
-APACHE ?= $(HOME)/uni/profiler/tomcat/apache-tomcat-8.0.0-RC5
-PROFILER_BACKEND ?= $(APACHE)/../backend
+APACHE_HOME ?= $(HOME)/uni/profiler/tomcat/apache-tomcat-8.0.0-RC5
+PROFILER_BACKEND ?= $(APACHE_HOME)/../backend
 
 AXIS2 = axis2-1.6.2
 AXIS2_WAR = var/$(AXIS2)-war/axis2.war
@@ -69,15 +69,15 @@ $(PROFILER_SKELETON): build.xml
 deploy: do-deploy restart-apache
 
 do-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
-	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/conf
-	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/services
-	$(CP) $(AXIS2_WAR) $(APACHE)/webapps/
-	$(CP) $(PROFILER_INI) $(APACHE)/webapps/axis2/WEB-INF/conf
-	$(CP) $(PROFILER_AAR) $(APACHE)/webapps/axis2/WEB-INF/services
+	@$(MKDIR) $(APACHE_HOME)/webapps/axis2/WEB-INF/conf
+	@$(MKDIR) $(APACHE_HOME)/webapps/axis2/WEB-INF/services
+	$(CP) $(AXIS2_WAR) $(APACHE_HOME)/webapps/
+	$(CP) $(PROFILER_INI) $(APACHE_HOME)/webapps/axis2/WEB-INF/conf
+	$(CP) $(PROFILER_AAR) $(APACHE_HOME)/webapps/axis2/WEB-INF/services
 
 restart-apache: do-deploy
-	$(APACHE)/bin/shutdown.sh
-	$(APACHE)/bin/startup.sh
+	$(APACHE_HOME)/bin/shutdown.sh
+	$(APACHE_HOME)/bin/startup.sh
 
 backend:
 	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
