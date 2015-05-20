@@ -63,9 +63,8 @@ It was tested with the following tools:
    ```
    This user is used in the deployment ant tasks. Additionally, you can
    access the Tomcat Manager Application at: http://localhost:8080/manager/html
-4. Execute the C:\Program Files\apache-tomcat-6.0.18\bin\startup.bat file
-   from the command line in order to see whether the server starts
-   correctly.
+4. Execute the `C:\Program Files\apache-tomcat-6.0.18\bin\startup.bat` file
+   from the command line in order to see whether the server starts correctly.
    Open the URL http://localhost:8080 in your browser in order to verify
    if the Apache Tomcat Welcome page is displayed.
 
