@@ -23,6 +23,7 @@ PROFILER_SKELETON = src/cis/profiler/web/ProfilerWebServiceSkeleton.java
 HOST ?= http://localhost
 PORT ?= 8080
 TEST_HOST ?= $(HOST):$(PORT)
+PWS_URL ?= $(TEST_HOST)/axis2/services/ProfilerWebService
 
 # TOOLS
 ANT ?= ant
@@ -40,7 +41,7 @@ default: deploy
 build.xml: $(WSDL) $(WSDL2JAVA)
 	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -scn ProfilerWebService
 
-$(PROFILER_AAR): build.xml $(wildcard src/cis/profiler/web/*.java)
+$(PROFILER_AAR): build.xml $(wildcard src/cis/profiler/web/*.java) $(PROFILER_SKELETON)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
 
 var/$(AXIS2).zip:
@@ -88,13 +89,9 @@ test: test-wsdl
 test-wsdl: test-wsdl-GetConfigurations test-wsdl-GetProfile test-wsdl-GetProfilingStatus
 
 test-wsdl-%:
-	curl -# $(TEST_HOST)/axis2/services/ProfilerWebService?wsdl 2> /dev/null | grep $* > /dev/null
+	curl -# $(PWS_URL)?wsdl 2> /dev/null | grep $* > /dev/null
 
 #test-service-GetConfiguration:
-# HELPER
-mkdir-%: dir = $(subst -,/,$*)
-mkdir-%:
-	@$(MKDIR) $(dir)
 
 .PHONY: clean
 clean:
