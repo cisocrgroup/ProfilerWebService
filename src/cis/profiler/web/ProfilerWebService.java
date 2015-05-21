@@ -218,11 +218,6 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 log(Level.SEVERE, "called validateEmail()");
                 return null;
         }
-        @Override
-        public CreateAccountResponse createAccount(CreateAccountRequest x) {
-                log(Level.SEVERE, "called createAccount()");
-                return null;
-        }
         // ??
         @Override
         public GetSimpleConfigurationsResponse getSimpleConfigurations() {
