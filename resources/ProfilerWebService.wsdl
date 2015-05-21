@@ -100,28 +100,6 @@
 
 			<xsd:element name="GetProfilingStatusResponse" type="tns:GetProfilingStatusResponseType"/>
 
-
-			<xsd:complexType name="ValidateEmailRequestType">
-				<xsd:sequence>
-					<xsd:element name="email" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ValidateEmailRequest" type="tns:ValidateEmailRequestType"/>
-
-
-			<xsd:complexType name="ValidateEmailResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-					<xsd:element name="isvalid" type="xsd:boolean"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ValidateEmailResponse" type="tns:ValidateEmailResponseType"/>
-
-
-
 			<xsd:complexType name="StartSessionResponseType">
 				<xsd:sequence>
 					<xsd:element name="returncode" type="xsd:int"/>
@@ -169,14 +147,6 @@
   </message>
   <message name="GetProfilingStatusResponse">
     <part name="part1" element="tns:GetProfilingStatusResponse">
-    </part>
-  </message>
-  <message name="ValidateEmailRequest">
-    <part name="part1" element="tns:ValidateEmailRequest">
-    </part>
-  </message>
-  <message name="ValidateEmailResponse">
-    <part name="part1" element="tns:ValidateEmailResponse">
     </part>
   </message>
   <message name="StartSessionResponse">
@@ -240,12 +210,6 @@
       <output message="tns:GetProfilingStatusResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetProfilingStatusResponse">
     </output>
     </operation>
-    <operation name="validateEmail">
-      <input message="tns:ValidateEmailRequest" wsaw:Action="validateEmail">
-    </input>
-      <output message="tns:ValidateEmailResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/ValidateEmailResponse">
-    </output>
-    </operation>
     <operation name="abortProfiling">
       <input message="tns:AbortProfilingRequest" wsaw:Action="abortProfiling">
     </input>
@@ -299,15 +263,6 @@
     </operation>
     <operation name="getProfilingStatus">
       <soap:operation soapAction="getProfilingStatus" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="validateEmail">
-      <soap:operation soapAction="validateEmail" style="document"/>
       <input>
         <soap:body use="literal"/>
       </input>
@@ -374,15 +329,6 @@
     </operation>
     <operation name="getProfilingStatus">
       <soap12:operation soapAction="getProfilingStatus" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="validateEmail">
-      <soap12:operation soapAction="validateEmail" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

@@ -22,6 +22,7 @@ BUILD_XML = build.xml
 WSDL = resources/ProfilerWebService.wsdl
 PWS_INTERFACE = src/cis/profiler/web/ProfilerWebServiceSkeletonInterface.java
 PWS_STUB = src/cis/profiler/web/ProfilerWebServiceStub.java
+PWS_MRIO = src/cis/profiler/web/ProfilerWebServiceMessageReceiverInOut.java
 HOST ?= http://localhost
 PORT ?= 8080
 TEST_HOST ?= $(HOST):$(PORT)

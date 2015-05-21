@@ -198,11 +198,6 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         }
 
         // old interface
-        @Override
-        public ValidateEmailResponse validateEmail(ValidateEmailRequest x) {
-                log(Level.SEVERE, "called validateEmail()");
-                return null;
-        }
         // ??
         @Override
         public GetSimpleConfigurationsResponse getSimpleConfigurations() {
