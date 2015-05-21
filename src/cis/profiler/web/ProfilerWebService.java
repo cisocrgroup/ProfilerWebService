@@ -199,11 +199,6 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
 
         // old interface
         @Override
-        public CheckQuotaResponse checkQuota(CheckQuotaRequest x) {
-                log(Level.SEVERE, "called checkQuota()");
-                return null;
-        }
-        @Override
         public GetTransactionsResponse getTransactions(GetTransactionsRequest x) {
                 log(Level.SEVERE, "called getTransactions()");
                 return null;

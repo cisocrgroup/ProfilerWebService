@@ -49,26 +49,6 @@
 
 			<xsd:element name="GetTransactionsResponse" type="tns:GetTransactionsResponseType"/>
 
-			<xsd:complexType name="CheckQuotaRequestType">
-				<xsd:sequence>
-					<xsd:element name="userid" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="CheckQuotaRequest" type="tns:CheckQuotaRequestType"/>
-
-
-			<xsd:complexType name="CheckQuotaResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-					<xsd:element name="quota" type="xsd:int"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="CheckQuotaResponse" type="tns:CheckQuotaResponseType"/>
-
-
 			<xsd:complexType name="SimpleEnrichRequestType">
 				<xsd:sequence>
 					<xsd:element name="configuration" type="xsd:string"/>
@@ -227,16 +207,8 @@
     <part name="part1" element="tns:ValidateEmailResponse">
     </part>
   </message>
-  <message name="CheckQuotaRequest">
-    <part name="part1" element="tns:CheckQuotaRequest">
-    </part>
-  </message>
   <message name="StartSessionResponse">
     <part name="part1" element="tns:StartSessionResponse">
-    </part>
-  </message>
-  <message name="CheckQuotaResponse">
-    <part name="part1" element="tns:CheckQuotaResponse">
     </part>
   </message>
   <message name="GetSimpleConfigurationsResponse">
@@ -282,12 +254,6 @@
       <input message="tns:GetTransactionsRequest" wsaw:Action="getTransactions">
     </input>
       <output message="tns:GetTransactionsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetTransactionsResponse">
-    </output>
-    </operation>
-    <operation name="checkQuota">
-      <input message="tns:CheckQuotaRequest" wsaw:Action="checkQuota">
-    </input>
-      <output message="tns:CheckQuotaResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/CheckQuotaResponse">
     </output>
     </operation>
     <operation name="getProfile">
@@ -349,15 +315,6 @@
     </operation>
     <operation name="getTransactions">
       <soap:operation soapAction="getTransactions" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="checkQuota">
-      <soap:operation soapAction="checkQuota" style="document"/>
       <input>
         <soap:body use="literal"/>
       </input>
@@ -442,15 +399,6 @@
     </operation>
     <operation name="getTransactions">
       <soap12:operation soapAction="getTransactions" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="checkQuota">
-      <soap12:operation soapAction="checkQuota" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>
