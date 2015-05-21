@@ -72,14 +72,4 @@ deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
 backend:
 	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
 include make/test.make
-
-.PHONY: clean
-clean:
-	$(RM) build.xml resources/services.xml
-	$(RM) -r build
-
-.PHONY: distclean
-distclean: clean
-	$(RM) -r var
-	$(RM) -r src/de
-	$(RM) -r src/org
+include make/clean.make
