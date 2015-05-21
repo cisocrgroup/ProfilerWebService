@@ -12,23 +12,6 @@
                                 </xsd:sequence>
                         </xsd:complexType>
 
-			<xsd:complexType name="ResendIDRequestType">
-				<xsd:sequence>
-					<xsd:element name="email" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ResendIDRequest" type="tns:ResendIDRequestType"/>
-
-			<xsd:complexType name="ResendIDResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ResendIDResponse" type="tns:ResendIDResponseType"/>
-
 
 			<xsd:complexType name="GetConfigurationsResponseType">
 				<xsd:sequence>
@@ -236,10 +219,6 @@
     <part name="part1" element="tns:GetTransactionsRequest">
     </part>
   </message>
-  <message name="ResendIDRequest">
-    <part name="part1" element="tns:ResendIDRequest">
-    </part>
-  </message>
   <message name="ValidateEmailRequest">
     <part name="part1" element="tns:ValidateEmailRequest">
     </part>
@@ -268,15 +247,11 @@
     <part name="part1" element="tns:GetProfileRequest">
     </part>
   </message>
-  <message name="GetSimpleConfigurationsRequest">
-  </message>
   <message name="GetConfigurationsResponse">
     <part name="part1" element="tns:GetConfigurationsResponse">
     </part>
   </message>
-  <message name="ResendIDResponse">
-    <part name="part1" element="tns:ResendIDResponse">
-    </part>
+  <message name="GetSimpleConfigurationsRequest">
   </message>
   <message name="StartSessionRequest">
   </message>
@@ -291,12 +266,6 @@
   <message name="GetConfigurationsRequest">
   </message>
   <portType name="ProfilerWebServicePortType">
-    <operation name="resendID">
-      <input message="tns:ResendIDRequest" wsaw:Action="resendID">
-    </input>
-      <output message="tns:ResendIDResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/ResendIDResponse">
-    </output>
-    </operation>
     <operation name="getConfigurations">
       <input message="tns:GetConfigurationsRequest" wsaw:Action="getConfigurations">
     </input>
@@ -396,15 +365,6 @@
         <soap:body use="literal"/>
       </output>
     </operation>
-    <operation name="resendID">
-      <soap:operation soapAction="resendID" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
     <operation name="getProfile">
       <soap:operation soapAction="getProfile" style="document"/>
       <input>
@@ -491,15 +451,6 @@
     </operation>
     <operation name="checkQuota">
       <soap12:operation soapAction="checkQuota" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="resendID">
-      <soap12:operation soapAction="resendID" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

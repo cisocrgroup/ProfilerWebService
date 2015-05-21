@@ -209,11 +209,6 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 return null;
         }
         @Override
-        public ResendIDResponse resendID(ResendIDRequest x) {
-                log(Level.SEVERE, "called resendID()");
-                return null;
-        }
-        @Override
         public ValidateEmailResponse validateEmail(ValidateEmailRequest x) {
                 log(Level.SEVERE, "called validateEmail()");
                 return null;

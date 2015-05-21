@@ -38,7 +38,7 @@ default: deploy
 # -or: override
 # -ssi service-interface
 build.xml resources/services.xml: $(WSDL) $(WSDL2JAVA)
-	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -scn ProfilerWebService
+	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -or
 
 $(PROFILER_AAR): build.xml resources/services.xml $(wildcard src/cis/profiler/web/*.java)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
