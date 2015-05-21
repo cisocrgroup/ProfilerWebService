@@ -196,39 +196,6 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                         log(e);
                 }
         }
-
-        // old interface
-        @Override
-        public CheckQuotaResponse checkQuota(CheckQuotaRequest x) {
-                log(Level.SEVERE, "called checkQuota()");
-                return null;
-        }
-        @Override
-        public GetTransactionsResponse getTransactions(GetTransactionsRequest x) {
-                log(Level.SEVERE, "called getTransactions()");
-                return null;
-        }
-        @Override
-        public ResendIDResponse resendID(ResendIDRequest x) {
-                log(Level.SEVERE, "called resendID()");
-                return null;
-        }
-        @Override
-        public ValidateEmailResponse validateEmail(ValidateEmailRequest x) {
-                log(Level.SEVERE, "called validateEmail()");
-                return null;
-        }
-        @Override
-        public CreateAccountResponse createAccount(CreateAccountRequest x) {
-                log(Level.SEVERE, "called createAccount()");
-                return null;
-        }
-        // ??
-        @Override
-        public GetSimpleConfigurationsResponse getSimpleConfigurations() {
-                log(Level.SEVERE, "called getSimpleConfigurations()");
-                return null;
-        }
 }
 
 /*

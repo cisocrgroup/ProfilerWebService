@@ -18,8 +18,11 @@ PROFILER_CONF_DIR = $(WEB_INF_DIR)/conf
 PROFILER_LIB_DIR = $(PROFILER_DIR)/lib
 PROFILER_INI = $(PROFILER_CONF_DIR)/profiler.ini
 SERVICES_XML = resources/services.xml
+BUILD_XML = build.xml
 WSDL = resources/ProfilerWebService.wsdl
-PROFILER_SKELETON = src/cis/profiler/web/ProfilerWebServiceSkeleton.java
+PWS_INTERFACE = src/cis/profiler/web/ProfilerWebServiceSkeletonInterface.java
+PWS_STUB = src/cis/profiler/web/ProfilerWebServiceStub.java
+PWS_MRIO = src/cis/profiler/web/ProfilerWebServiceMessageReceiverInOut.java
 HOST ?= http://localhost
 PORT ?= 8080
 TEST_HOST ?= $(HOST):$(PORT)
@@ -38,10 +41,11 @@ default: deploy
 # -sd: service-description
 # -or: override
 # -ssi service-interface
-build.xml: $(WSDL) $(WSDL2JAVA)
-	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -scn ProfilerWebService
 
-$(PROFILER_AAR): build.xml $(wildcard src/cis/profiler/web/*.java) $(PROFILER_SKELETON)
+$(BUILD_XML) $(SERVICES_XML): $(WSDL2JAVA) $(WSDL)
+	$(WSDL2JAVA) -uri $(WSDL) -p cis.profiler.web --noWSDL -s -d adb -sd -ssi -ss -g -scn ProfilerWebService
+
+$(PROFILER_AAR): $(BUILD_XML) $(SERVICES_XML) $(wildcard src/cis/profiler/web/*.java)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
 
 var/$(AXIS2).zip:
@@ -63,50 +67,14 @@ $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
 	$< $@ $(PROFILER_BACKEND)
 
-$(PROFILER_SKELETON): build.xml
-	scripts/generate_profiler_skeleton.sh $@
-
-deploy: do-deploy restart-apache
-
-do-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
+deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
 	@$(MKDIR) $(APACHE_HOME)/webapps/axis2/WEB-INF/conf
 	@$(MKDIR) $(APACHE_HOME)/webapps/axis2/WEB-INF/services
-	$(CP) $(AXIS2_WAR) $(APACHE_HOME)/webapps/
+#	$(CP) $(AXIS2_WAR) $(APACHE_HOME)/webapps/
 	$(CP) $(PROFILER_INI) $(APACHE_HOME)/webapps/axis2/WEB-INF/conf
 	$(CP) $(PROFILER_AAR) $(APACHE_HOME)/webapps/axis2/WEB-INF/services
 
-restart-apache: do-deploy
-	$(APACHE_HOME)/bin/shutdown.sh
-	$(APACHE_HOME)/bin/startup.sh
-
 backend:
 	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
-
-.PHONY: test
-test: test-wsdl test-getConfigurations test-getProfilingStatus
-
-.PHONY: test-wsdl #test-service-GetConfigurations
-test-wsdl: test-wsdl-GetConfigurations test-wsdl-GetProfile test-wsdl-GetProfilingStatus
-
-test-wsdl-%:
-	curl -# $(PWS_URL)?wsdl 2> /dev/null | grep $* > /dev/null
-test-getConfigurations: \
-	test-getConfigurations-latin \
-	test-getConfigurations-polish \
-	test-getConfigurations-greek \
-	test-getConfigurations-german
-test-getConfigurations-%:
-	curl -# $(PWS_URL)/getConfigurations 2> /dev/null | grep $* > /dev/null
-test-getProfilingStatus:
-	curl -d userid=10 -# $(PWS_URL)/getProfilingStatus 2> /dev/null | grep 'not profiling' > /dev/null
-
-.PHONY: clean
-clean:
-	$(RM) build.xml #$(PROFILER_SKELETON)
-	$(RM) -r build
-
-.PHONY: distclean
-distclean: clean
-	$(RM) -r var
-	$(RM) -r src/de
-	$(RM) -r src/org
+include make/test.make
+include make/clean.make
