@@ -1,9 +1,9 @@
 # make/test.make
 
 .PHONY: test
-test: test-wsdl test-getConfigurations test-getProfilingStatus
+test: test-wsdl test-getConfigurations test-getProfilingStatus test-startSession
 
-.PHONY: test-wsdl #test-service-GetConfigurations
+.PHONY: test-wsdl
 test-wsdl: test-wsdl-GetConfigurations test-wsdl-GetProfile test-wsdl-GetProfilingStatus
 
 test-wsdl-%:
@@ -17,3 +17,5 @@ test-getConfigurations-%:
 	curl -# $(PWS_URL)/getConfigurations 2> /dev/null | grep $* > /dev/null
 test-getProfilingStatus:
 	curl -d userid=10 -# $(PWS_URL)/getProfilingStatus 2> /dev/null | grep 'not profiling' > /dev/null
+test-startSession:
+	curl -# $(PWS_URL)/startSession 2> /dev/null | grep 'returncode>0<' > /dev/null
