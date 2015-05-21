@@ -18,7 +18,10 @@ PROFILER_CONF_DIR = $(WEB_INF_DIR)/conf
 PROFILER_LIB_DIR = $(PROFILER_DIR)/lib
 PROFILER_INI = $(PROFILER_CONF_DIR)/profiler.ini
 SERVICES_XML = resources/services.xml
+BUILD_XML = build.xml
 WSDL = resources/ProfilerWebService.wsdl
+PWS_INTERFACE = src/cis/profiler/web/ProfilerWebServiceSkeletonInterface.java
+PWS_STUB = src/cis/profiler/web/ProfilerWebServiceStub.java
 HOST ?= http://localhost
 PORT ?= 8080
 TEST_HOST ?= $(HOST):$(PORT)
@@ -37,10 +40,11 @@ default: deploy
 # -sd: service-description
 # -or: override
 # -ssi service-interface
-build.xml resources/services.xml: $(WSDL) $(WSDL2JAVA)
-	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -or
 
-$(PROFILER_AAR): build.xml resources/services.xml $(wildcard src/cis/profiler/web/*.java)
+$(BUILD_XML) $(SERVICES_XML): $(WSDL2JAVA) $(WSDL)
+	$(WSDL2JAVA) -uri $(WSDL) -p cis.profiler.web --noWSDL -s -d adb -sd -ssi -ss -g -scn ProfilerWebService
+
+$(PROFILER_AAR): $(BUILD_XML) $(SERVICES_XML) $(wildcard src/cis/profiler/web/*.java)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
 
 var/$(AXIS2).zip:

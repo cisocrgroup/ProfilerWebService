@@ -29,26 +29,6 @@
 
 			<xsd:element name="GetSimpleConfigurationsResponse" type="tns:GetSimpleConfigurationsResponseType"/>
 
-
-			<xsd:complexType name="GetTransactionsRequestType">
-				<xsd:sequence>
-					<xsd:element name="userid" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="GetTransactionsRequest" type="tns:GetTransactionsRequestType"/>
-
-
-			<xsd:complexType name="GetTransactionsResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-					<xsd:element maxOccurs="unbounded" minOccurs="0" name="transactions" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="GetTransactionsResponse" type="tns:GetTransactionsResponseType"/>
-
 			<xsd:complexType name="SimpleEnrichRequestType">
 				<xsd:sequence>
 					<xsd:element name="configuration" type="xsd:string"/>
@@ -183,20 +163,12 @@
     <part name="part1" element="tns:SimpleEnrichResponse">
     </part>
   </message>
-  <message name="GetTransactionsResponse">
-    <part name="part1" element="tns:GetTransactionsResponse">
-    </part>
-  </message>
   <message name="SimpleEnrichRequest">
     <part name="part1" element="tns:SimpleEnrichRequest">
     </part>
   </message>
   <message name="GetProfilingStatusResponse">
     <part name="part1" element="tns:GetProfilingStatusResponse">
-    </part>
-  </message>
-  <message name="GetTransactionsRequest">
-    <part name="part1" element="tns:GetTransactionsRequest">
     </part>
   </message>
   <message name="ValidateEmailRequest">
@@ -250,12 +222,6 @@
       <output message="tns:GetSimpleConfigurationsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetSimpleConfigurationsResponse">
     </output>
     </operation>
-    <operation name="getTransactions">
-      <input message="tns:GetTransactionsRequest" wsaw:Action="getTransactions">
-    </input>
-      <output message="tns:GetTransactionsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetTransactionsResponse">
-    </output>
-    </operation>
     <operation name="getProfile">
       <input message="tns:GetProfileRequest" wsaw:Action="getProfile">
     </input>
@@ -306,15 +272,6 @@
     </operation>
     <operation name="getSimpleConfigurations">
       <soap:operation soapAction="getSimpleConfigurations" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="getTransactions">
-      <soap:operation soapAction="getTransactions" style="document"/>
       <input>
         <soap:body use="literal"/>
       </input>
@@ -390,15 +347,6 @@
     </operation>
     <operation name="getSimpleConfigurations">
       <soap12:operation soapAction="getSimpleConfigurations" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="getTransactions">
-      <soap12:operation soapAction="getTransactions" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

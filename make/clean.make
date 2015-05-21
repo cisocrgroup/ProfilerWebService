@@ -2,7 +2,7 @@
 
 .PHONY: clean
 clean:
-	$(RM) build.xml resources/services.xml
+	$(RM) $(BUILD_XML) $(SERVICES_XML) $(PWS_INTERFACE) $(PWS_STUB)
 	$(RM) -r build
 
 .PHONY: distclean
