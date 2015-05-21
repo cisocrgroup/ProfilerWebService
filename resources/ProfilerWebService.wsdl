@@ -21,14 +21,6 @@
 
 			<xsd:element name="GetConfigurationsResponse" type="tns:GetConfigurationsResponseType"/>
 
-			<xsd:complexType name="GetSimpleConfigurationsResponseType">
-				<xsd:sequence>
-					<xsd:element maxOccurs="unbounded" minOccurs="0" name="configurations" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="GetSimpleConfigurationsResponse" type="tns:GetSimpleConfigurationsResponseType"/>
-
 			<xsd:complexType name="SimpleEnrichRequestType">
 				<xsd:sequence>
 					<xsd:element name="configuration" type="xsd:string"/>
@@ -153,10 +145,6 @@
     <part name="part1" element="tns:StartSessionResponse">
     </part>
   </message>
-  <message name="GetSimpleConfigurationsResponse">
-    <part name="part1" element="tns:GetSimpleConfigurationsResponse">
-    </part>
-  </message>
   <message name="GetProfileRequest">
     <part name="part1" element="tns:GetProfileRequest">
     </part>
@@ -164,8 +152,6 @@
   <message name="GetConfigurationsResponse">
     <part name="part1" element="tns:GetConfigurationsResponse">
     </part>
-  </message>
-  <message name="GetSimpleConfigurationsRequest">
   </message>
   <message name="StartSessionRequest">
   </message>
@@ -184,12 +170,6 @@
       <input message="tns:GetConfigurationsRequest" wsaw:Action="getConfigurations">
     </input>
       <output message="tns:GetConfigurationsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetConfigurationsResponse">
-    </output>
-    </operation>
-    <operation name="getSimpleConfigurations">
-      <input message="tns:GetSimpleConfigurationsRequest" wsaw:Action="getSimpleConfigurations">
-    </input>
-      <output message="tns:GetSimpleConfigurationsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetSimpleConfigurationsResponse">
     </output>
     </operation>
     <operation name="getProfile">
@@ -227,15 +207,6 @@
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="getConfigurations">
       <soap:operation soapAction="getConfigurations" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="getSimpleConfigurations">
-      <soap:operation soapAction="getSimpleConfigurations" style="document"/>
       <input>
         <soap:body use="literal"/>
       </input>
@@ -293,15 +264,6 @@
     <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="getConfigurations">
       <soap12:operation soapAction="getConfigurations" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="getSimpleConfigurations">
-      <soap12:operation soapAction="getSimpleConfigurations" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

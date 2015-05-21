@@ -196,14 +196,6 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                         log(e);
                 }
         }
-
-        // old interface
-        // ??
-        @Override
-        public GetSimpleConfigurationsResponse getSimpleConfigurations() {
-                log(Level.SEVERE, "called getSimpleConfigurations()");
-                return null;
-        }
 }
 
 /*
