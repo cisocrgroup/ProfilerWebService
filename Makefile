@@ -39,9 +39,9 @@ default: deploy
 # -or: override
 # -ssi service-interface
 build.xml: $(WSDL) $(WSDL2JAVA)
-	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -scn ProfilerWebService
+	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -or -scn ProfilerWebServiceSkeleton
 
-$(PROFILER_AAR): build.xml $(wildcard src/cis/profiler/web/*.java) $(PROFILER_SKELETON)
+$(PROFILER_AAR): build.xml $(wildcard src/cis/profiler/web/*.java) #$(PROFILER_SKELETON)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
 
 var/$(AXIS2).zip:
@@ -63,8 +63,8 @@ $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
 	$< $@ $(PROFILER_BACKEND)
 
-$(PROFILER_SKELETON): build.xml
-	scripts/generate_profiler_skeleton.sh $@
+# $(PROFILER_SKELETON): build.xml
+# 	scripts/generate_profiler_skeleton.sh $@
 
 deploy: do-deploy restart-apache
 
@@ -102,7 +102,7 @@ test-getProfilingStatus:
 
 .PHONY: clean
 clean:
-	$(RM) build.xml #$(PROFILER_SKELETON)
+	$(RM) build.xml $(PROFILER_SKELETON)
 	$(RM) -r build
 
 .PHONY: distclean
