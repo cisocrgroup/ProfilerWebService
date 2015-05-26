@@ -23,9 +23,9 @@ WSDL = resources/ProfilerWebService.wsdl
 PWS_INTERFACE = src/cis/profiler/web/ProfilerWebServiceSkeletonInterface.java
 PWS_STUB = src/cis/profiler/web/ProfilerWebServiceStub.java
 PWS_MRIO = src/cis/profiler/web/ProfilerWebServiceMessageReceiverInOut.java
-HOST ?= http://localhost
-PORT ?= 8080
-TEST_HOST ?= $(HOST):$(PORT)
+PWS_HOST ?= http://localhost
+PWS_PORT ?= 8080
+TEST_HOST ?= $(PWS_HOST):$(PWS_PORT)
 PWS_URL ?= $(TEST_HOST)/axis2/services/ProfilerWebService
 
 # TOOLS
@@ -45,7 +45,7 @@ default: deploy
 $(BUILD_XML) $(SERVICES_XML): $(WSDL2JAVA) $(WSDL)
 	$(WSDL2JAVA) -uri $(WSDL) -p cis.profiler.web --noWSDL -s -d adb -sd -ssi -ss -g -scn ProfilerWebService
 
-$(PROFILER_AAR): $(BUILD_XML) $(SERVICES_XML) $(wildcard src/cis/profiler/web/*.java)
+$(PROFILER_AAR): $(BUILD_XML) $(SERVICES_XML) $(wildcard src/cis/profiler/web/*.java) $(wildcard src/cis/profiler/client/*.java)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
 
 var/$(AXIS2).zip:

@@ -70,11 +70,11 @@ class Profiler {
                 return builder.toString();
         }
 
-        private void setupCommandArgs(Backend backend) throws IOException {
+        private void setupCommandArgs(Backend backend) throws IOException, BackendException {
                 args = new ArrayList<String>();
                 args.add(exe.getCanonicalPath());
                 args.add("--config");
-                args.add(backend.getConfiguration(in.getLanguage()));
+                args.add(backend.getConfiguration(in.getLanguage()).getCanonicalPath());
                 args.add("--sourceFile");
                 args.add(infile.getCanonicalPath());
                 args.add("--sourceFormat");

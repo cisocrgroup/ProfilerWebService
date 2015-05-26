@@ -39,7 +39,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
 
         public ProfilerWebService() {
                 try {
-                        logger.log(Level.INFO, ("CONFIG_FILE: " + CONFIG_FILE));
+                        log(Level.INFO, ("configuration file: " + CONFIG_FILE));
                         backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
                         logBackend();
                 } catch (IOException e) {
@@ -74,7 +74,29 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         public GetProfileResponse getProfile(GetProfileRequest r) {
                 log(Level.INFO, "called getProfile()");
                 try {
-                        profiler = new Profiler(backend, ProfilerInputFile.fromRequest(r));
+                        log(Level.INFO, "here(1)");
+                        GetProfileRequestType rt = r.getGetProfileRequest();
+                        log(Level.INFO, "here(2)");
+                        log(Level.INFO, "request type doc_type: " + rt.getDoc_in_type());
+                        log(Level.INFO, "here(3)");
+                        log(Level.INFO, "request type configuration: " + rt.getConfiguration());
+                        log(Level.INFO, "here(4)");
+                        log(Level.INFO, "request type doc_in: " + rt.getDoc_in());
+                        log(Level.INFO, "here(5)");
+                        log(Level.INFO, "request type doc_in: " + rt.getDoc_in().getBinaryData());
+                        log(Level.INFO, "here(6)");
+                        log(Level.INFO, "request type doc_in: " + rt.getDoc_in().getBinaryData().getBase64Binary());
+                        log(Level.INFO, "here(7)");
+                        ProfilerInputFile infile = ProfilerInputFile.fromRequest(r);
+                        log(Level.INFO, "here(8)");
+
+
+                // String l = rt.getConfiguration();
+                // DataHandler dh = rt.getDoc_in().getBinaryData().getBase64Binary();
+                // InputStream is = dh.getInputStream();
+
+                        log(Level.INFO, "infile type: " + infile.getProfilerInputType());
+                        profiler = new Profiler(backend,infile);
                         log(Level.INFO, "profiler input: " +
                             profiler.getInputFile().getCanonicalPath());
                         log(Level.INFO, "profiler docout: " +
