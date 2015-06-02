@@ -12,6 +12,8 @@ Dependencies:
 * [apache-ant](http://ant.apache.org)
 * [apache-tomcat](tomcat.apache.org)
 * [axis2](http://ws.apache.org/axis2)
+* [python](https://www.python.org)
+* [cmake](http://www.cmake.org/)
 
 # Building and starting the webservice
 1. Initialize all git submodules using `$ git submodule update --init --recursive`.
