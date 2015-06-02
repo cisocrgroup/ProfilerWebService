@@ -23,10 +23,10 @@ This will checkout all required submodules:
 3. Set the environment variable `JAVA_HOME` to point to your java installation eg:
 `export JAVA_HOME=/usr/lib/jvm/java-7-openjdk`
 4. Find the base directory of your tomcat installation eg: `/srv/www/tomcat/apache-8.0.0/`
-and set the environment variable `APACHE_HOME` accordingly:
-`export APACHE_HOME=/srv/www/tomcat/apache-8.0.0/`
+and set the environment variable `TOMCAT_HOME` accordingly:
+`export TOMCAT_HOME=/srv/www/tomcat/apache-8.0.0/`
 5. The language backend directory, where the language resources for the profiler are stored,
-defaults to `$APACHE_HOME/../backend`.
+defaults to `$TOMCAT_HOME/../backend`.
 If you want to change this value you can set the environment variable `PROFILER_BACKEND` accordingly.
 6. Change into the `pws` base directory and type `$ make`.
 The make process
