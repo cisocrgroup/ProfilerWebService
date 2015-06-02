@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class Profiler {
         private final int BUFFER_SIZE = 8192;
@@ -25,7 +27,7 @@ class Profiler {
                 setupCommandArgs(backend);
         }
 
-        public void run() throws IOException, InterruptedException {
+        public void run() {
                 try {
                         status = new StatusUploading();
                         in.writeInputFile(infile);
@@ -33,14 +35,11 @@ class Profiler {
                         ProcessBuilder builder = new ProcessBuilder(args);
                         builder.redirectErrorStream(true);
                         process = builder.start();
-                        process.wait();
-                        status = new StatusFinished(process.exitValue());
+                        status = new StatusFinished(process.waitFor());
                 } catch (IOException e) {
                         status = new StatusError(e.getMessage());
-                        throw e;
                 } catch (InterruptedException e) {
                         status = new StatusError(e.getMessage());
-                        throw e;
                 }
         }
         public void abort() {
