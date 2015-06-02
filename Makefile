@@ -68,10 +68,9 @@ $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
 	$< $@ $(PROFILER_BACKEND)
 
-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
+deploy: $(PROFILER_AAR) $(PROFILER_INI) $(PROFILER_BACKEND)
 	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
-	$(SUOD) $(CP) $(AXIS2_WAR) $(TOMCAT_HOME)/webapps/
 	$(SUOD) $(CP) $(PROFILER_INI) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) $(CP) $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 

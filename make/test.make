@@ -1,7 +1,7 @@
 # make/test.make
 
 .PHONY: test
-test: deploy test-wsdl test-getConfigurations test-getProfilingStatus test-startSession test-getProfile
+test: test-wsdl test-getConfigurations test-getProfilingStatus test-startSession test-getProfile
 
 .PHONY: test-wsdl
 test-wsdl: test-wsdl-GetConfigurations test-wsdl-GetProfile test-wsdl-GetProfilingStatus
