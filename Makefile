@@ -27,6 +27,7 @@ PWS_HOST ?= http://localhost
 PWS_PORT ?= 8080
 TEST_HOST ?= $(PWS_HOST):$(PWS_PORT)
 PWS_URL ?= $(TEST_HOST)/axis2/services/ProfilerWebService
+SUDO ?=
 
 # TOOLS
 ANT ?= ant
@@ -68,11 +69,11 @@ $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	$< $@ $(PROFILER_BACKEND)
 
 deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
-	@$(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
-	@$(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
-#	$(CP) $(AXIS2_WAR) $(TOMCAT_HOME)/webapps/
-	$(CP) $(PROFILER_INI) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
-	$(CP) $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
+	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
+	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
+	$(SUOD) $(CP) $(AXIS2_WAR) $(TOMCAT_HOME)/webapps/
+	$(SUOD) $(CP) $(PROFILER_INI) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
+	$(SUDO) $(CP) $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 
 backend:
 	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend

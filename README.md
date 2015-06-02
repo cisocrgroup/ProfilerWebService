@@ -31,6 +31,8 @@ and set the environment variable `TOMCAT_HOME` accordingly:
 defaults to `$TOMCAT_HOME/../backend`.
 If you want to change this value you can set the environment variable `PROFILER_BACKEND` accordingly.
 6. Change into the `pws` base directory and type `$ make`.
+   If you need special permissions for your tomcat installation you can set them using `SUDO`:
+   `SUDO=sudo make` or `SUOD='sudo -u tomcat-user' make`
 The make process
    * downloads `axis2-1.6.2` into the `pws/vars` directory
    * generates the ant buildfile `build.xml` and the WSDL files
