@@ -3,6 +3,7 @@ package cis.profiler.client;
 import cis.profiler.web.ProfilerWebServiceStub;
 import de.uni_muenchen.cis.www.profiler.AttachmentType;
 import de.uni_muenchen.cis.www.profiler.GetProfileRequest;
+import de.uni_muenchen.cis.www.profiler.GetProfileResponse;
 import de.uni_muenchen.cis.www.profiler.GetProfileRequestType;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,12 @@ class Main {
                 }
                 ProfilerWebServiceStub stub = getStub(args);
                 GetProfileRequest request = getProfileRequest(getFilePath(args), getConfiguration(args));
-                stub.getProfile(request);
+                GetProfileResponse response = stub.getProfile(request);
+                if (response == null)
+                        throw new RuntimeException("no response");
+                else if (response.getGetProfileResponse().getReturncode() != 0)
+                        throw new RuntimeException("Invalid response: " +
+                                                   response.getGetProfileResponse().getMessage());
         }
 
         private static final ProfilerWebServiceStub getStub(String[] args) throws Exception {
