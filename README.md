@@ -21,19 +21,23 @@ This will checkout all required submodules:
    * `gsm/lexicon`
    * `gsm/lexicon/gsm/ocrcxx`
    * `gsm/lexicon/gsm/ocrcxx/gsm/csl`
-2. Make shure that [apache-tomcat](https://tomcat.apache.org/) is installed and working
-3. Set the environment variable `JAVA_HOME` to point to your java installation eg:
+2. Make sure that [apache-tomcat](https://tomcat.apache.org/) is installed and working
+3. Make sure that [axis2](http://ws.apache.org/axis2) deployed:
+   * download [axis2-war.zip](http://apache.mirrors.tds.net//axis/axis2/java/core/1.6.2/axis2-1.6.2-war.zip)
+   * unzip the file archive and either deploy the `axis2.war` file using the tomcat manager gui or
+     simply copy the file `axis2.war` into the directory `$TOMCAT_HOME/webapps`
+4. Set the environment variable `JAVA_HOME` to point to your java installation eg:
 `export JAVA_HOME=/usr/lib/jvm/java-7-openjdk`
-4. Find the base directory of your tomcat installation eg: `/srv/www/tomcat/apache-8.0.0/`
+5. Find the base directory of your tomcat installation eg: `/srv/www/tomcat/apache-8.0.0/`
 and set the environment variable `TOMCAT_HOME` accordingly:
 `export TOMCAT_HOME=/srv/www/tomcat/apache-8.0.0/`
-5. The language backend directory, where the language resources for the profiler are stored,
+6. The language backend directory, where the language resources for the profiler are stored,
 defaults to `$TOMCAT_HOME/../backend`.
 If you want to change this value you can set the environment variable `PROFILER_BACKEND` accordingly.
-6. Change into the `pws` base directory and type `$ make`.
-7. If you need special permissions for your tomcat installation you can set them using `SUDO`:
+7. Change into the `pws` base directory and type `$ make`.
+8. If you need special permissions for your tomcat installation you can set them using `SUDO`:
    `SUDO=sudo make` or `SUOD='sudo -u tomcat-user' make`.
-8. The make process
+9. The make process
    * downloads `axis2-1.6.2` into the `pws/vars` directory
    * generates the ant buildfile `build.xml` and the WSDL files
    * generates the `ProfilerWebService.aar` from the java soures
@@ -42,7 +46,7 @@ If you want to change this value you can set the environment variable `PROFILER_
    * installs the language ressources and the profiler into the language backend
    * installs both the `axis2` service and the `ProfilerWebService`
    * restarts apache (*Note: Im not shure if this step is required*)
-9. After the build process has finished succesfully,
+10. After the build process has finished succesfully,
 you can check the ProfilerWebService using `$ make test`.
 You can further tune the url of the Webservice using the variables `HOST`, `PORT` and `PWS_URL`.
 [*WSDL]: Web Service Descritpion Language
