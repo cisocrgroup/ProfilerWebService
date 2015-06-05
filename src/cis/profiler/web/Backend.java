@@ -17,14 +17,21 @@ class Backend {
         }
 
         public File getBackendDir() throws BackendException {
-                return new File(mustGet(BACKEND_KEY));
+                File dir = new File(mustGet(BACKEND_KEY));
+                if (!dir.exists())
+                        throw new BackendException(dir + " does not exist");
+                else if (!dir.isDirectory())
+                        throw new BackendException(dir + " is not a directory");
+                assert(dir != null);
+                return dir;
         }
 
         public File getProfilerExe() throws BackendException {
                 File exe = new File(getBackendDir(), "/bin/profiler");
-                if (!exe.exists() || !exe.canExecute()) {
-                        throw new BackendException(
-                                "invalid or missing profiler executable");
+                if (!exe.exists()) {
+                        throw new BackendException(exe + " does not exist");
+                } else if (!exe.canExecute()) {
+                        throw new BackendException("cannot execute " + exe);
                 }
                 assert(exe != null);
                 return exe;
