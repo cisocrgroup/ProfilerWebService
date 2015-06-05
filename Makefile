@@ -77,6 +77,6 @@ deploy: $(PROFILER_AAR) $(PROFILER_INI) $(BACKEND_HOME)
 	$(SUDO) $(CP) $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 
 $(BACKEND_HOME):
-	BACKEND=$(BACKEND_HOME) $(MAKE) -C gsm/lexicon backend
+	$(SUDO) $(MAKE) BACKEND=$(BACKEND_HOME) -C gsm/lexicon backend
 include make/test.make
 include make/clean.make
