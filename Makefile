@@ -73,7 +73,7 @@ $(PROFILER_INI): scripts/generate_profiler_ini.sh
 deploy: $(PROFILER_AAR) $(PROFILER_INI) $(BACKEND_HOME)
 	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
-	$(SUOD) $(CP) $(PROFILER_INI) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
+	$(SUDO) $(CP) $(PROFILER_INI) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) $(CP) $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 
 $(BACKEND_HOME):
