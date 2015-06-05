@@ -110,11 +110,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 GetConfigurationsResponseType rt =
                         new GetConfigurationsResponseType();
                 try {
-                        String[] configurations = backend.getConfigurations();
-                        log(Level.INFO, "size: " + configurations.length);
-                        for (String c: configurations)
-                                log(Level.INFO, "configuration: " + c);
-                        rt.setConfigurations(configurations);
+                        rt.setConfigurations(backend.getConfigurations());
                 } catch (BackendException e) {
                         log(e);
                 }
