@@ -1,13 +1,18 @@
 package cis.profiler.web;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class Backend {
+        private final static Logger logger =
+                Logger.getLogger(Backend.class.getName());
         private final String BACKEND_KEY = "backend";
         private Properties backend;
 
@@ -28,11 +33,10 @@ class Backend {
 
         public File getProfilerExe() throws BackendException {
                 File exe = new File(getBackendDir(), "/bin/profiler");
-                if (!exe.exists()) {
+                if (!exe.exists())
                         throw new BackendException(exe + " does not exist");
-                } else if (!exe.canExecute()) {
+                else if (!exe.canExecute())
                         throw new BackendException("cannot execute " + exe);
-                }
                 assert(exe != null);
                 return exe;
         }
@@ -43,16 +47,15 @@ class Backend {
                                 "invalid configuration file: " + res);
                 return res;
         }
-        public String[] getLanguages() throws BackendException {
-                ArrayList<String> languages  = new ArrayList();
+        public String[] getConfigurations() throws BackendException {
                 File backendDir = getBackendDir();
-                for (File file: backendDir.listFiles()) {
-                        if (file.getName().endsWith(".ini")) {
-                                languages.add(file.getName().replaceAll("\\.ini", ""));
-                        }
-                }
-                String[] result = new String[languages.size()];
-                languages.toArray(result);
+                File[] iniFiles = backendDir.listFiles(
+                        new ConfigurationsFileFilter());
+                if (iniFiles == null)
+                        return new String[0];
+                String[] result = new String[iniFiles.length];
+                for (int i = 0; i < iniFiles.length; ++i)
+                        result[i] = iniFiles[i].getName().replaceAll("\\.ini", "");
                 return result;
         }
 
@@ -64,5 +67,12 @@ class Backend {
                 }
                 assert(val != null);
                 return val;
+        }
+
+        private class ConfigurationsFileFilter implements FileFilter {
+                @Override
+                public boolean accept(File file) {
+                        return file != null && file.getName().endsWith(".ini");
+                }
         }
 }

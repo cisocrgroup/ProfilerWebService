@@ -110,10 +110,13 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 GetConfigurationsResponseType rt =
                         new GetConfigurationsResponseType();
                 try {
-                        rt.setConfigurations(backend.getLanguages());
+                        String[] configurations = backend.getConfigurations();
+                        log(Level.INFO, "size: " + configurations.length);
+                        for (String c: configurations)
+                                log(Level.INFO, "configuration: " + c);
+                        rt.setConfigurations(configurations);
                 } catch (BackendException e) {
                         log(e);
-                        rt = null;
                 }
                 r.setGetConfigurationsResponse(rt);
                 return r;
@@ -188,8 +191,10 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                         log(Level.INFO, ProfilerWebService.class.getName() + " created");
                         log(Level.INFO, "backend:  " + backend.getBackendDir().getPath());
                         log(Level.INFO, "profiler: " + backend.getProfilerExe().getPath());
-                        for (String language: backend.getLanguages())
-                                log(Level.INFO, "language: " + language);
+                        String[] cs = backend.getConfigurations();
+                        log(Level.INFO, "number of configurations: " + cs.length);
+                        for (String configuration: backend.getConfigurations())
+                                log(Level.INFO, "configuration: " + configuration);
                 } catch (BackendException e) {
                         log(e);
                 }
