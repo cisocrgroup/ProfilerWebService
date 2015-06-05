@@ -63,6 +63,8 @@ $(WSDL2JAVA): var/$(AXIS2).zip
 $(AXIS2_WAR): var/$(AXIS2)-war.zip
 	unzip -d $(dir $@) -u $<
 	touch $@
+deploy-axis2: $(AXIS2_WAR)
+	$(SUDO) $(CP) $(AXIS2_WAR) $(TOMCAT_HOME)/webapps
 
 $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
