@@ -33,7 +33,7 @@ and set the environment variable `TOMCAT_HOME` accordingly:
 `export TOMCAT_HOME=/srv/www/tomcat/apache-8.0.0/`
 6. The language backend directory, where the language resources for the profiler are stored,
 defaults to `$TOMCAT_HOME/../backend`.
-If you want to change this value you can set the environment variable `PROFILER_BACKEND` accordingly.
+If you want to change this value you can set the environment variable `BACKEND_HOME` accordingly.
 7. Change into the `pws` base directory and type `$ make`.
 8. If you need special permissions for your tomcat installation you can set them using `SUDO`:
    `SUDO=sudo make` or `SUOD='sudo -u tomcat-user' make`.

@@ -3,7 +3,7 @@
 #
 
 TOMCAT_HOME ?= $(HOME)/uni/profiler/tomcat/apache-tomcat-8.0.0-RC5
-PROFILER_BACKEND ?= $(TOMCAT_HOME)/../backend
+PROFILER_HOME ?= $(TOMCAT_HOME)/../backend
 
 AXIS2 = axis2-1.6.2
 AXIS2_WAR = var/$(AXIS2)-war/axis2.war
@@ -66,15 +66,15 @@ $(AXIS2_WAR): var/$(AXIS2)-war.zip
 
 $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
-	$< $@ $(PROFILER_BACKEND)
+	$< $@ $(BACKEND_HOME)
 
-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(PROFILER_BACKEND)
+deploy: $(PROFILER_AAR) $(PROFILER_INI) $(BACKEND_HOME)
 	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 	$(SUOD) $(CP) $(PROFILER_INI) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) $(CP) $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 
-backend:
-	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
+$(BACKEND_HOME):
+	BACKEND=$(BACKEND_HOME) $(MAKE) -C gsm/lexicon backend
 include make/test.make
 include make/clean.make
