@@ -4,21 +4,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class Profiler {
+        private static Pattern ITERATIONS = Pattern.compile("Iteration \\d+");
         private final int BUFFER_SIZE = 8192;
         private File exe, infile, profileout, docout;
-        private Status status;
         private Process process = null;
         private ProfilerInputFile in;
         private ArrayList<String> args;
+        private final static Logger logger = Logger.getLogger(Profiler.class.getName());
 
         public Profiler(Backend backend, ProfilerInputFile in)
                 throws BackendException, IOException {
-                status = new StatusNotStarted();
                 exe = backend.getProfilerExe();
                 infile = makeTmpFile("profiler_input_", in.getExtension());
                 docout = makeTmpFile("profiler_docout_", ".xml");
@@ -27,19 +31,25 @@ class Profiler {
                 setupCommandArgs(backend);
         }
 
-        public void run() {
+        public int run() {
                 try {
-                        status = new StatusUploading();
                         in.writeInputFile(infile);
-                        status = new StatusProfiling();
                         ProcessBuilder builder = new ProcessBuilder(args);
                         builder.redirectErrorStream(true);
                         process = builder.start();
-                        status = new StatusFinished(process.waitFor());
-                } catch (IOException e) {
-                        status = new StatusError(e.getMessage());
-                } catch (InterruptedException e) {
-                        status = new StatusError(e.getMessage());
+                        BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(process.getInputStream())
+                                );
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                                Matcher m = ITERATIONS.matcher(line);
+                                if (m.find())
+                                        logger.log(Level.INFO, "line: " + line);
+                        }
+                        return process.waitFor();
+                } catch (IOException|InterruptedException e) {
+                        logger.log(Level.SEVERE, e.getMessage());
+                        return 1;
                 }
         }
         public void abort() {
@@ -56,9 +66,6 @@ class Profiler {
         }
         public File getInputFile() {
                 return infile;
-        }
-        public Status getStatus() {
-                return status;
         }
         public String getCommand() {
                 StringBuilder builder = new StringBuilder();
@@ -86,63 +93,5 @@ class Profiler {
 
         private static File makeTmpFile(String prefix, String suffix) throws IOException {
                 return File.createTempFile(prefix, suffix);
-        }
-
-        public abstract class Status {
-                public boolean isOk() {
-                        return true;
-                }
-                public abstract String getMessage();
-        }
-        private class StatusNotStarted extends Status {
-                @Override
-                public String getMessage() {
-                        return "Not started";
-                }
-        }
-        private class StatusProfiling extends Status {
-                @Override
-                public String getMessage() {
-                        return "Profiling";
-                }
-        }
-        private class StatusFinished extends Status {
-                int status;
-                public StatusFinished(int status) {
-                        this.status = status;
-                }
-                @Override
-                public boolean isOk() {
-                        return status == 0;
-                }
-                @Override
-                public String getMessage() {
-                        String res = "Finished profiling";
-                        if (! isOk()) {
-                                res = "Internal profiler error: " +
-                                        Integer.toString(status);
-                        }
-                        return res;
-                }
-        }
-        private class StatusUploading extends Status {
-                @Override
-                public String getMessage() {
-                        return "Uploading";
-                }
-        }
-        private class StatusError extends Status {
-                private String error;
-                public StatusError(String error) {
-                        this.error = error;
-                }
-                @Override
-                public boolean isOk() {
-                        return false;
-                }
-                @Override
-                public String getMessage() {
-                        return "Error: " + error;
-                }
         }
 }

@@ -14,6 +14,7 @@ class Backend {
         private final static Logger logger =
                 Logger.getLogger(Backend.class.getName());
         private final String BACKEND_KEY = "backend";
+        private final String PROFILER_KEY = "profiler";
         private Properties backend;
 
         public Backend(InputStream is) throws IOException {
@@ -32,7 +33,7 @@ class Backend {
         }
 
         public File getProfilerExe() throws BackendException {
-                File exe = new File(getBackendDir(), "/bin/profiler");
+                File exe = new File(mustGet(PROFILER_KEY));
                 if (!exe.exists())
                         throw new BackendException(exe + " does not exist");
                 else if (!exe.canExecute())

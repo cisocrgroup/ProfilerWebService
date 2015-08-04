@@ -3,7 +3,7 @@
 #
 
 TOMCAT_HOME ?= $(HOME)/uni/profiler/tomcat/apache-tomcat-8.0.0-RC5
-PROFILER_HOME ?= $(TOMCAT_HOME)/../backend
+BACKEND_HOME ?= $(TOMCAT_HOME)/../backend
 
 AXIS2 = axis2-1.6.2
 AXIS2_WAR = var/$(AXIS2)-war/axis2.war
@@ -14,6 +14,7 @@ PROFILER_AAR = build/lib/ProfilerWebService.aar
 PROFILER_JAR = build/lib/ProfilerWebService.jar
 PROFILER_DIR = build/ProfilerWebService
 WEB_INF_DIR = $(PROFILER_DIR)/WEB-INF
+PROFILER_EXE ?= $(BACKEND_HOME)/bin/profiler
 PROFILER_CONF_DIR = $(WEB_INF_DIR)/conf
 PROFILER_LIB_DIR = $(PROFILER_DIR)/lib
 PROFILER_INI = $(PROFILER_CONF_DIR)/profiler.ini
@@ -36,7 +37,7 @@ JAR ?= jar
 CP ?= cp
 
 # DEFAULT
-default: deploy
+default: $(PROFILER_AAR)
 
 # -ss: server-side
 # -sd: service-description
@@ -68,7 +69,7 @@ deploy-axis2: $(AXIS2_WAR)
 
 $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
-	$< $@ $(BACKEND_HOME)
+	$< $@ $(BACKEND_HOME) $(PROFILER_EXE)
 
 deploy: $(PROFILER_AAR) $(PROFILER_INI) $(BACKEND_HOME)
 	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
