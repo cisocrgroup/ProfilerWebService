@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.util.zip.GZIPInputStream;
 import javax.activation.DataHandler;
 
 /**
@@ -48,7 +50,8 @@ public abstract class ProfilerInputFile {
                 String fileType = rt.getDoc_in_type();
                 String l = rt.getConfiguration();
                 DataHandler dh = rt.getDoc_in().getBinaryData().getBase64Binary();
-                InputStream is = dh.getInputStream();
+                InputStream is = new GZIPInputStream(dh.getInputStream());
+
                 switch (fileType) {
                 case DOCXML:
                         return new DocXmlProfilerInputFile(is, l);
