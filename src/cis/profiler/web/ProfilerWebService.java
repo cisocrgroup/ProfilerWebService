@@ -136,6 +136,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
 
         private AttachmentType buildProfileAttachment(File file) {
                 assert(file != null);
+                log(Level.INFO, "writing file " + file);
                 AttachmentType att = new AttachmentType();
                 Base64Binary bin = new Base64Binary();
                 bin.setBase64Binary(new DataHandler(new FileDataSource(file)));
