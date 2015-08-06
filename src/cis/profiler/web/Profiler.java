@@ -36,7 +36,8 @@ class Profiler {
         public int run() {
                 try {
                         logger.log(Level.INFO, "writing input file for profiler ...");
-                        in.writeInputFile(infile);
+                        int n = in.writeInputFile(infile);
+                        logger.log(Level.INFO, "input file size: " + n);
                         ProcessBuilder builder = new ProcessBuilder(args);
                         builder.redirectErrorStream(true);
                         logger.log(Level.INFO, "starting profiler ...");
