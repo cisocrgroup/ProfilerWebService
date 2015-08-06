@@ -33,7 +33,7 @@ public abstract class ProfilerInputFile {
         public int writeInputFile(File outfile) throws IOException {
                 Files.copy(is, outfile.toPath());
                 is.close();
-                return 0;
+                return (int)outfile.length();
         }
 
         public static ProfilerInputFile fromRequest(GetProfileRequest r)
