@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.GZIPInputStream;
 import javax.activation.DataHandler;
 
@@ -31,7 +32,11 @@ public abstract class ProfilerInputFile {
                 return language;
         }
         public int writeInputFile(File outfile) throws IOException {
-                return (int) Files.copy(is, outfile.toPath());
+                return (int) Files.copy(
+                        is,
+                        outfile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING
+                        );
         }
 
         public static ProfilerInputFile fromRequest(GetProfileRequest r)
