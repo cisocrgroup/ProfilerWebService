@@ -101,15 +101,16 @@ class Profiler {
         }
 
         private void compress() throws IOException {
+                logger.log(Level.INFO, "compressing ...");
                 compressDocOut();
                 compressProfileOut();
-                logger.log(Level.INFO, "compressing");
+                logger.log(Level.INFO, "done compressing");
         }
         private void compressDocOut() throws IOException {
                 File compressedDocout = new File(
                         docout.getCanonicalPath() + ".gz"
                         );
-                logger.log(Level.INFO, "compressing " + docout + " " + compressedDocout);
+                logger.log(Level.INFO, "compressing " + docout + " to " + compressedDocout);
                 compressFromTo(docout, compressedDocout);
                 docout.delete();
                 docout = compressedDocout;
@@ -118,7 +119,7 @@ class Profiler {
                 File compressedProfileout = new File(
                         profileout.getCanonicalPath() + ".gz"
                         );
-                logger.log(Level.INFO, "compressing " + profileout + " " + compressedProfileout);
+                logger.log(Level.INFO, "compressing " + profileout + " to " + compressedProfileout);
                 compressFromTo(profileout, compressedProfileout);
                 profileout.delete();
                 profileout = compressedProfileout;
