@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPOutputStream;
 
 class Profiler {
         private static Pattern ITERATIONS = Pattern.compile("Iteration \\d+");
@@ -46,7 +48,10 @@ class Profiler {
                                 if (m.find())
                                         logger.log(Level.INFO, "line: " + line);
                         }
-                        return process.waitFor();
+                        int res = process.waitFor();
+                        if (res == 0)
+                                compress();
+                        return res;
                 } catch (IOException|InterruptedException e) {
                         logger.log(Level.SEVERE, e.getMessage());
                         return 1;
@@ -93,5 +98,36 @@ class Profiler {
 
         private static File makeTmpFile(String prefix, String suffix) throws IOException {
                 return File.createTempFile(prefix, suffix);
+        }
+
+        private void compress() throws IOException {
+                compressDocOut();
+                compressProfileOut();
+                logger.log(Level.INFO, "compressing");
+        }
+        private void compressDocOut() throws IOException {
+                File compressedDocout = new File(
+                        docout.getCanonicalPath() + ".gz"
+                        );
+                logger.log(Level.INFO, "compressing " + docout + " " + compressedDocout);
+                compressFromTo(docout, compressedDocout);
+                docout.delete();
+                docout = compressedDocout;
+        }
+        private void compressProfileOut() throws IOException {
+                File compressedProfileout = new File(
+                        profileout.getCanonicalPath() + ".gz"
+                        );
+                logger.log(Level.INFO, "compressing " + profileout + " " + compressedProfileout);
+                compressFromTo(profileout, compressedProfileout);
+                profileout.delete();
+                profileout = compressedProfileout;
+
+        }
+        private void compressFromTo(File from, File to) throws IOException {
+                final GZIPOutputStream gzipOut = new GZIPOutputStream(
+                        new FileOutputStream(to)
+                        );
+                Files.copy(from.toPath(), gzipOut);
         }
 }
