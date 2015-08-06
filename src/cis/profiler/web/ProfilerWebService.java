@@ -78,12 +78,10 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                         log(Level.INFO, "profiler done: " + ret);
                         if (ret == 0)
                                 return buildProfileResponse();
-                        else
-                                return buildErrorProfileResponse();
                 } catch (Exception e) {
                         log(e);
-                        return buildErrorProfileResponse();
                 }
+                return buildErrorProfileResponse();
         }
         @Override
         public AbortProfilingResponse abortProfiling(AbortProfilingRequest x) {
