@@ -31,9 +31,7 @@ public abstract class ProfilerInputFile {
                 return language;
         }
         public int writeInputFile(File outfile) throws IOException {
-                Files.copy(is, outfile.toPath());
-                is.close();
-                return (int)outfile.length();
+                return (int) Files.copy(is, outfile.toPath());
         }
 
         public static ProfilerInputFile fromRequest(GetProfileRequest r)
