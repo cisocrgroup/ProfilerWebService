@@ -129,5 +129,6 @@ class Profiler {
                         new FileOutputStream(to)
                         );
                 Files.copy(from.toPath(), gzipOut);
+                gzipOut.close();
         }
 }
