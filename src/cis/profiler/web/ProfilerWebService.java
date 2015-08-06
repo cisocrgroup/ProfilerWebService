@@ -33,20 +33,13 @@ import org.w3.www._2005._05.xmlmime.Base64Binary;
  */
 public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         private static String CONFIG_FILE = "/conf/profiler.ini";
-        private static String NOT_STARTED = "not profiling";
-        private static String PROFILING = "profiling";
-        private static String FINISHED = "finished profiling";
-        private static String ERROR = "error";
-
         private final static Logger logger = Logger.getLogger(ProfilerWebService.class.getName());
         private Backend backend;
         private Profiler profiler = null;
-        private String status;
 
         public ProfilerWebService() {
                 try {
                         log(Level.INFO, ("configuration file: " + CONFIG_FILE));
-                        status = NOT_STARTED;
                         backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
                         logBackend();
                 } catch (IOException e) {
@@ -58,17 +51,15 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         // new interface
         @Override
         public GetProfilingStatusResponse getProfilingStatus(GetProfilingStatusRequest x) {
-                log(Level.INFO, "called getProfilingStatus(): " + status);
+                log(Level.INFO, "called getProfilingStatus()");
                 GetProfilingStatusResponse r =
                         new GetProfilingStatusResponse();
                 GetProfilingStatusResponseType rt =
                         new GetProfilingStatusResponseType();
-                rt.setStatus(status);
-                rt.setMessage(status);
-                rt.setAdditional(status);
+                rt.setStatus("not profiling");
+                rt.setMessage("not profiling");
+                rt.setAdditional("not profiling");
                 rt.setReturncode(0);
-                if (ERROR.equals(status))
-                        rt.setReturncode(-1);
                 r.setGetProfilingStatusResponse(rt);
                 return r;
         }
@@ -80,12 +71,10 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                         GetProfileRequestType rt = r.getGetProfileRequest();
                         ProfilerInputFile infile = ProfilerInputFile.fromRequest(r);
 
-                        status = PROFILING;
                         profiler = new Profiler(backend, infile);
                         log(Level.INFO, "profiler internal command: " +
                             profiler.getCommand());
                         int ret = profiler.run();
-                        status = FINISHED;
                         log(Level.INFO, "profiler done: " + ret);
                         if (ret == 0)
                                 return buildProfileResponse();
@@ -155,31 +144,34 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         }
 
         private GetProfileResponse buildErrorProfileResponse() {
-                status = ERROR;
+                log(Level.INFO, "building error response ...");
                 GetProfileResponseType rt = new GetProfileResponseType();
                 rt.setDoc_out_size(0);
                 rt.setDoc_out(new AttachmentType());
                 rt.setProfile_out_size(0);
                 rt.setProfile_out(new AttachmentType());
                 rt.setQuota_left(100);
-                rt.setMessage(status);
+                rt.setMessage("error");
                 rt.setReturncode(-1);
                 GetProfileResponse r = new GetProfileResponse();
                 r.setGetProfileResponse(rt);
+                log(Level.INFO, "done building error response");
                 return r;
         }
 
         private GetProfileResponse buildProfileResponse() {
+                log(Level.INFO, "building profile response ...");
                 GetProfileResponseType rt = new GetProfileResponseType();
                 rt.setDoc_out_size(profiler.getDocOutFile().length());
                 rt.setDoc_out(buildProfileAttachment(profiler.getDocOutFile()));
                 rt.setProfile_out_size(profiler.getProfileOutFile().length());
                 rt.setProfile_out(buildProfileAttachment(profiler.getProfileOutFile()));
                 rt.setQuota_left(100);
-                rt.setMessage(status);
+                rt.setMessage("ok");
                 rt.setReturncode(0);
                 GetProfileResponse r = new GetProfileResponse();
                 r.setGetProfileResponse(rt);
+                log(Level.INFO, "done building profile response");
                 return r;
         }
 
