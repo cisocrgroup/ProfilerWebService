@@ -56,9 +56,7 @@ class Profiler {
                                 compress();
                         return res;
                 } catch (IOException|InterruptedException e) {
-                        for (StackTraceElement s: e.getStackTrace()) {
-                                logger.log(Level.SEVERE, s.toString());
-                        }
+                        logger.log(Level.SEVERE, "ProfilerException: ", e);
                         return 1;
                 }
         }
