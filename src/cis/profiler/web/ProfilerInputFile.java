@@ -30,19 +30,12 @@ public abstract class ProfilerInputFile {
         public String getLanguage() {
                 return language;
         }
-        public int writeInputFile(File outfile) throws IOException {
+        public void writeInputFile(File outfile) throws IOException {
                 byte[] buffer = new byte[BUFFER_SIZE];
                 int total = 0, bytesRead = 0;
-                OutputStream os = new FileOutputStream(outfile);
-                while ((bytesRead = is.read(buffer, 0, BUFFER_SIZE)) != -1) {
-                        total += bytesRead;
-                        os.write(buffer, 0, bytesRead);
-                }
-                os.flush();
-                os.close();
-                return total;
+                Files.copy(is, outfile.toPath());
+                is.close();
         }
-
         public static ProfilerInputFile fromRequest(GetProfileRequest r)
                 throws BackendException, IOException {
 
