@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.zip.GZIPInputStream;
 import javax.activation.DataHandler;
 
 /**
@@ -29,16 +32,11 @@ public abstract class ProfilerInputFile {
                 return language;
         }
         public int writeInputFile(File outfile) throws IOException {
-                byte[] buffer = new byte[BUFFER_SIZE];
-                int total = 0, bytesRead = 0;
-                OutputStream os = new FileOutputStream(outfile);
-                while ((bytesRead = is.read(buffer, 0, BUFFER_SIZE)) != -1) {
-                        total += bytesRead;
-                        os.write(buffer, 0, bytesRead);
-                }
-                os.flush();
-                os.close();
-                return total;
+                return (int) Files.copy(
+                        is,
+                        outfile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING
+                        );
         }
 
         public static ProfilerInputFile fromRequest(GetProfileRequest r)
@@ -48,7 +46,8 @@ public abstract class ProfilerInputFile {
                 String fileType = rt.getDoc_in_type();
                 String l = rt.getConfiguration();
                 DataHandler dh = rt.getDoc_in().getBinaryData().getBase64Binary();
-                InputStream is = dh.getInputStream();
+                InputStream is = new GZIPInputStream(dh.getInputStream());
+
                 switch (fileType) {
                 case DOCXML:
                         return new DocXmlProfilerInputFile(is, l);

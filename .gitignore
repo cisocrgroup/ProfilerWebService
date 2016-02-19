@@ -1,3 +1,4 @@
+resources/services.xml
 build/*
 dist/*
 build.xml

@@ -32,13 +32,14 @@ import org.w3.www._2005._05.xmlmime.Base64Binary;
  * @author flo (flo@cis.lmu.de)
  */
 public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
-        private final String CONFIG_FILE = "/conf/profiler.ini";
+        private static String CONFIG_FILE = "/conf/profiler.ini";
         private final static Logger logger = Logger.getLogger(ProfilerWebService.class.getName());
         private Backend backend;
         private Profiler profiler = null;
 
         public ProfilerWebService() {
                 try {
+                        log(Level.INFO, ("configuration file: " + CONFIG_FILE));
                         backend = new Backend(this.getClass().getResourceAsStream(CONFIG_FILE));
                         logBackend();
                 } catch (IOException e) {
@@ -55,38 +56,32 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                         new GetProfilingStatusResponse();
                 GetProfilingStatusResponseType rt =
                         new GetProfilingStatusResponseType();
-                if (profiler != null) {
-                        rt.setReturncode(0);
-                        rt.setMessage(profiler.getStatus().getMessage());
-                        rt.setStatus(profiler.getStatus().getMessage());
-                        rt.setAdditional(profiler.getStatus().getMessage());
-                } else {
-                        rt.setReturncode(-1);
-                        rt.setMessage("not profiling");
-                        rt.setStatus("not profiling");
-                        rt.setAdditional("not profiling");
-                }
+                rt.setStatus("not profiling");
+                rt.setMessage("not profiling");
+                rt.setAdditional("not profiling");
+                rt.setReturncode(0);
                 r.setGetProfilingStatusResponse(rt);
                 return r;
         }
+
         @Override
         public GetProfileResponse getProfile(GetProfileRequest r) {
                 log(Level.INFO, "called getProfile()");
                 try {
-                        profiler = new Profiler(backend, ProfilerInputFile.fromRequest(r));
-                        log(Level.INFO, "profiler input: " +
-                            profiler.getInputFile().getCanonicalPath());
-                        log(Level.INFO, "profiler docout: " +
-                            profiler.getDocOutFile().getCanonicalPath());
-                        log(Level.INFO, "profiler profileout: " +
-                            profiler.getProfileOutFile().getCanonicalPath());
+                        GetProfileRequestType rt = r.getGetProfileRequest();
+                        ProfilerInputFile infile = ProfilerInputFile.fromRequest(r);
+
+                        profiler = new Profiler(backend, infile);
                         log(Level.INFO, "profiler internal command: " +
                             profiler.getCommand());
-                        profiler.run();
+                        int ret = profiler.run();
+                        log(Level.INFO, "profiler done: " + ret);
+                        if (ret == 0)
+                                return buildProfileResponse();
                 } catch (Exception e) {
                         log(e);
                 }
-                return buildProfileResponse();
+                return buildErrorProfileResponse();
         }
         @Override
         public AbortProfilingResponse abortProfiling(AbortProfilingRequest x) {
@@ -111,10 +106,12 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                 GetConfigurationsResponseType rt =
                         new GetConfigurationsResponseType();
                 try {
-                        rt.setConfigurations(backend.getLanguages());
+                        String[] cs = backend.getConfigurations();
+                        for (String c: cs)
+                                log(Level.INFO, "configuration: " + c);
+                        rt.setConfigurations(backend.getConfigurations());
                 } catch (BackendException e) {
                         log(e);
-                        rt = null;
                 }
                 r.setGetConfigurationsResponse(rt);
                 return r;
@@ -137,6 +134,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
 
         private AttachmentType buildProfileAttachment(File file) {
                 assert(file != null);
+                log(Level.INFO, "writing file " + file);
                 AttachmentType att = new AttachmentType();
                 Base64Binary bin = new Base64Binary();
                 bin.setBase64Binary(new DataHandler(new FileDataSource(file)));
@@ -145,34 +143,34 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         }
 
         private GetProfileResponse buildErrorProfileResponse() {
-                assert(profiler != null);
+                log(Level.INFO, "building error response ...");
                 GetProfileResponseType rt = new GetProfileResponseType();
                 rt.setDoc_out_size(0);
                 rt.setDoc_out(new AttachmentType());
                 rt.setProfile_out_size(0);
                 rt.setProfile_out(new AttachmentType());
                 rt.setQuota_left(100);
-                rt.setMessage(profiler.getStatus().getMessage());
+                rt.setMessage("error");
                 rt.setReturncode(-1);
                 GetProfileResponse r = new GetProfileResponse();
                 r.setGetProfileResponse(rt);
+                log(Level.INFO, "done building error response");
                 return r;
         }
 
         private GetProfileResponse buildProfileResponse() {
-                assert(profiler != null);
-                if (! profiler.getStatus().isOk())
-                        return buildErrorProfileResponse();
+                log(Level.INFO, "building profile response ...");
                 GetProfileResponseType rt = new GetProfileResponseType();
                 rt.setDoc_out_size(profiler.getDocOutFile().length());
                 rt.setDoc_out(buildProfileAttachment(profiler.getDocOutFile()));
                 rt.setProfile_out_size(profiler.getProfileOutFile().length());
                 rt.setProfile_out(buildProfileAttachment(profiler.getProfileOutFile()));
                 rt.setQuota_left(100);
-                rt.setMessage(profiler.getStatus().getMessage());
+                rt.setMessage("ok");
                 rt.setReturncode(0);
                 GetProfileResponse r = new GetProfileResponse();
                 r.setGetProfileResponse(rt);
+                log(Level.INFO, "done building profile response");
                 return r;
         }
 
@@ -189,44 +187,9 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                         log(Level.INFO, ProfilerWebService.class.getName() + " created");
                         log(Level.INFO, "backend:  " + backend.getBackendDir().getPath());
                         log(Level.INFO, "profiler: " + backend.getProfilerExe().getPath());
-                        for (String language: backend.getLanguages())
-                                log(Level.INFO, "language: " + language);
                 } catch (BackendException e) {
                         log(e);
                 }
-        }
-
-        // old interface
-        @Override
-        public CheckQuotaResponse checkQuota(CheckQuotaRequest x) {
-                log(Level.SEVERE, "called checkQuota()");
-                return null;
-        }
-        @Override
-        public GetTransactionsResponse getTransactions(GetTransactionsRequest x) {
-                log(Level.SEVERE, "called getTransactions()");
-                return null;
-        }
-        @Override
-        public ResendIDResponse resendID(ResendIDRequest x) {
-                log(Level.SEVERE, "called resendID()");
-                return null;
-        }
-        @Override
-        public ValidateEmailResponse validateEmail(ValidateEmailRequest x) {
-                log(Level.SEVERE, "called validateEmail()");
-                return null;
-        }
-        @Override
-        public CreateAccountResponse createAccount(CreateAccountRequest x) {
-                log(Level.SEVERE, "called createAccount()");
-                return null;
-        }
-        // ??
-        @Override
-        public GetSimpleConfigurationsResponse getSimpleConfigurations() {
-                log(Level.SEVERE, "called getSimpleConfigurations()");
-                return null;
         }
 }
 

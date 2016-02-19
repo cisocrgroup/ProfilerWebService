@@ -4,19 +4,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.GZIPOutputStream;
 
 class Profiler {
+        private static Pattern ITERATIONS = Pattern.compile("Iteration \\d+");
         private final int BUFFER_SIZE = 8192;
         private File exe, infile, profileout, docout;
-        private Status status;
         private Process process = null;
         private ProfilerInputFile in;
         private ArrayList<String> args;
+        private final static Logger logger = Logger.getLogger(Profiler.class.getName());
 
         public Profiler(Backend backend, ProfilerInputFile in)
                 throws BackendException, IOException {
-                status = new StatusNotStarted();
                 exe = backend.getProfilerExe();
                 infile = makeTmpFile("profiler_input_", in.getExtension());
                 docout = makeTmpFile("profiler_docout_", ".xml");
@@ -25,22 +33,31 @@ class Profiler {
                 setupCommandArgs(backend);
         }
 
-        public void run() throws IOException, InterruptedException {
+        public int run() {
                 try {
-                        status = new StatusUploading();
-                        in.writeInputFile(infile);
-                        status = new StatusProfiling();
+                        logger.log(Level.INFO, "writing input file for profiler ...");
+                        int n = in.writeInputFile(infile);
+                        logger.log(Level.INFO, "input file size: " + n);
                         ProcessBuilder builder = new ProcessBuilder(args);
                         builder.redirectErrorStream(true);
+                        logger.log(Level.INFO, "starting profiler ...");
                         process = builder.start();
-                        process.wait();
-                        status = new StatusFinished(process.exitValue());
-                } catch (IOException e) {
-                        status = new StatusError(e.getMessage());
-                        throw e;
-                } catch (InterruptedException e) {
-                        status = new StatusError(e.getMessage());
-                        throw e;
+                        BufferedReader reader = new BufferedReader(
+                                new InputStreamReader(process.getInputStream())
+                                );
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                                Matcher m = ITERATIONS.matcher(line);
+                                if (m.find())
+                                        logger.log(Level.INFO, "line: " + line);
+                        }
+                        int res = process.waitFor();
+                        if (res == 0)
+                                compress();
+                        return res;
+                } catch (IOException|InterruptedException e) {
+                        logger.log(Level.SEVERE, "ProfilerException: ", e);
+                        return 1;
                 }
         }
         public void abort() {
@@ -58,9 +75,6 @@ class Profiler {
         public File getInputFile() {
                 return infile;
         }
-        public Status getStatus() {
-                return status;
-        }
         public String getCommand() {
                 StringBuilder builder = new StringBuilder();
                 for (String arg: args) {
@@ -70,11 +84,11 @@ class Profiler {
                 return builder.toString();
         }
 
-        private void setupCommandArgs(Backend backend) throws IOException {
+        private void setupCommandArgs(Backend backend) throws IOException, BackendException {
                 args = new ArrayList<String>();
                 args.add(exe.getCanonicalPath());
                 args.add("--config");
-                args.add(backend.getConfiguration(in.getLanguage()));
+                args.add(backend.getConfiguration(in.getLanguage()).getCanonicalPath());
                 args.add("--sourceFile");
                 args.add(infile.getCanonicalPath());
                 args.add("--sourceFormat");
@@ -89,61 +103,36 @@ class Profiler {
                 return File.createTempFile(prefix, suffix);
         }
 
-        public abstract class Status {
-                public boolean isOk() {
-                        return true;
-                }
-                public abstract String getMessage();
+        private void compress() throws IOException {
+                logger.log(Level.INFO, "compressing ...");
+                compressDocOut();
+                compressProfileOut();
+                logger.log(Level.INFO, "done compressing");
         }
-        private class StatusNotStarted extends Status {
-                @Override
-                public String getMessage() {
-                        return "Not started";
-                }
+        private void compressDocOut() throws IOException {
+                File compressedDocout = new File(
+                        docout.getCanonicalPath() + ".gz"
+                        );
+                logger.log(Level.INFO, "compressing " + docout + " to " + compressedDocout);
+                compressFromTo(docout, compressedDocout);
+                docout.delete();
+                docout = compressedDocout;
         }
-        private class StatusProfiling extends Status {
-                @Override
-                public String getMessage() {
-                        return "Profiling";
-                }
+        private void compressProfileOut() throws IOException {
+                File compressedProfileout = new File(
+                        profileout.getCanonicalPath() + ".gz"
+                        );
+                logger.log(Level.INFO, "compressing " + profileout + " to " + compressedProfileout);
+                compressFromTo(profileout, compressedProfileout);
+                profileout.delete();
+                profileout = compressedProfileout;
+
         }
-        private class StatusFinished extends Status {
-                int status;
-                public StatusFinished(int status) {
-                        this.status = status;
-                }
-                @Override
-                public boolean isOk() {
-                        return status == 0;
-                }
-                @Override
-                public String getMessage() {
-                        String res = "Finished profiling";
-                        if (! isOk()) {
-                                res = "Internal profiler error: " +
-                                        Integer.toString(status);
-                        }
-                        return res;
-                }
-        }
-        private class StatusUploading extends Status {
-                @Override
-                public String getMessage() {
-                        return "Uploading";
-                }
-        }
-        private class StatusError extends Status {
-                private String error;
-                public StatusError(String error) {
-                        this.error = error;
-                }
-                @Override
-                public boolean isOk() {
-                        return false;
-                }
-                @Override
-                public String getMessage() {
-                        return "Error: " + error;
-                }
+        private void compressFromTo(File from, File to) throws IOException {
+                final GZIPOutputStream gzipOut = new GZIPOutputStream(
+                        new FileOutputStream(to)
+                        );
+                Files.copy(from.toPath(), gzipOut);
+                gzipOut.close();
         }
 }

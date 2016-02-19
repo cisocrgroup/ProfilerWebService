@@ -7,13 +7,17 @@ if test -z $2; then
     exit 1;
 fi
 
+if test -z $3; then
+    exit 1;
+fi
+
 cat > $1 <<EOF
 #
 # profiler.ini
 # automatically generated on `date` *do not edit*
 #
 backend = $2
-
+profiler = $3
 # DEPRECATED SETTINGS
 dbURL = jdbc:mysql://alpha.cis.uni-muenchen.de:3306/ProfilerWebService
 username = pws

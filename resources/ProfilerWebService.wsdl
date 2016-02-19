@@ -12,23 +12,6 @@
                                 </xsd:sequence>
                         </xsd:complexType>
 
-			<xsd:complexType name="ResendIDRequestType">
-				<xsd:sequence>
-					<xsd:element name="email" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ResendIDRequest" type="tns:ResendIDRequestType"/>
-
-			<xsd:complexType name="ResendIDResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ResendIDResponse" type="tns:ResendIDResponseType"/>
-
 
 			<xsd:complexType name="GetConfigurationsResponseType">
 				<xsd:sequence>
@@ -37,76 +20,6 @@
 			</xsd:complexType>
 
 			<xsd:element name="GetConfigurationsResponse" type="tns:GetConfigurationsResponseType"/>
-
-			<xsd:complexType name="GetSimpleConfigurationsResponseType">
-				<xsd:sequence>
-					<xsd:element maxOccurs="unbounded" minOccurs="0" name="configurations" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="GetSimpleConfigurationsResponse" type="tns:GetSimpleConfigurationsResponseType"/>
-
-
-			<xsd:complexType name="GetTransactionsRequestType">
-				<xsd:sequence>
-					<xsd:element name="userid" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="GetTransactionsRequest" type="tns:GetTransactionsRequestType"/>
-
-
-			<xsd:complexType name="GetTransactionsResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-					<xsd:element maxOccurs="unbounded" minOccurs="0" name="transactions" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="GetTransactionsResponse" type="tns:GetTransactionsResponseType"/>
-
-
-			<xsd:complexType name="CreateAccountRequestType">
-				<xsd:sequence>
-					<xsd:element name="username" type="xsd:string"/>
-					<xsd:element name="institution" type="xsd:string"/>
-					<xsd:element name="email" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="CreateAccountRequest" type="tns:CreateAccountRequestType"/>
-
-
-			<xsd:complexType name="CreateAccountResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="CreateAccountResponse" type="tns:CreateAccountResponseType"/>
-
-
-			<xsd:complexType name="CheckQuotaRequestType">
-				<xsd:sequence>
-					<xsd:element name="userid" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="CheckQuotaRequest" type="tns:CheckQuotaRequestType"/>
-
-
-			<xsd:complexType name="CheckQuotaResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-					<xsd:element name="quota" type="xsd:int"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="CheckQuotaResponse" type="tns:CheckQuotaResponseType"/>
-
 
 			<xsd:complexType name="SimpleEnrichRequestType">
 				<xsd:sequence>
@@ -179,28 +92,6 @@
 
 			<xsd:element name="GetProfilingStatusResponse" type="tns:GetProfilingStatusResponseType"/>
 
-
-			<xsd:complexType name="ValidateEmailRequestType">
-				<xsd:sequence>
-					<xsd:element name="email" type="xsd:string"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ValidateEmailRequest" type="tns:ValidateEmailRequestType"/>
-
-
-			<xsd:complexType name="ValidateEmailResponseType">
-				<xsd:sequence>
-					<xsd:element name="returncode" type="xsd:int"/>
-					<xsd:element name="message" type="xsd:string"/>
-					<xsd:element name="isvalid" type="xsd:boolean"/>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:element name="ValidateEmailResponse" type="tns:ValidateEmailResponseType"/>
-
-
-
 			<xsd:complexType name="StartSessionResponseType">
 				<xsd:sequence>
 					<xsd:element name="returncode" type="xsd:int"/>
@@ -238,16 +129,8 @@
     <part name="part1" element="tns:GetProfilingStatusRequest">
     </part>
   </message>
-  <message name="CreateAccountResponse">
-    <part name="part1" element="tns:CreateAccountResponse">
-    </part>
-  </message>
   <message name="SimpleEnrichResponse">
     <part name="part1" element="tns:SimpleEnrichResponse">
-    </part>
-  </message>
-  <message name="GetTransactionsResponse">
-    <part name="part1" element="tns:GetTransactionsResponse">
     </part>
   </message>
   <message name="SimpleEnrichRequest">
@@ -258,50 +141,16 @@
     <part name="part1" element="tns:GetProfilingStatusResponse">
     </part>
   </message>
-  <message name="GetTransactionsRequest">
-    <part name="part1" element="tns:GetTransactionsRequest">
-    </part>
-  </message>
-  <message name="ResendIDRequest">
-    <part name="part1" element="tns:ResendIDRequest">
-    </part>
-  </message>
-  <message name="ValidateEmailRequest">
-    <part name="part1" element="tns:ValidateEmailRequest">
-    </part>
-  </message>
-  <message name="ValidateEmailResponse">
-    <part name="part1" element="tns:ValidateEmailResponse">
-    </part>
-  </message>
-  <message name="CheckQuotaRequest">
-    <part name="part1" element="tns:CheckQuotaRequest">
-    </part>
-  </message>
   <message name="StartSessionResponse">
     <part name="part1" element="tns:StartSessionResponse">
-    </part>
-  </message>
-  <message name="CheckQuotaResponse">
-    <part name="part1" element="tns:CheckQuotaResponse">
-    </part>
-  </message>
-  <message name="GetSimpleConfigurationsResponse">
-    <part name="part1" element="tns:GetSimpleConfigurationsResponse">
     </part>
   </message>
   <message name="GetProfileRequest">
     <part name="part1" element="tns:GetProfileRequest">
     </part>
   </message>
-  <message name="GetSimpleConfigurationsRequest">
-  </message>
   <message name="GetConfigurationsResponse">
     <part name="part1" element="tns:GetConfigurationsResponse">
-    </part>
-  </message>
-  <message name="ResendIDResponse">
-    <part name="part1" element="tns:ResendIDResponse">
     </part>
   </message>
   <message name="StartSessionRequest">
@@ -316,45 +165,11 @@
   </message>
   <message name="GetConfigurationsRequest">
   </message>
-  <message name="CreateAccountRequest">
-    <part name="part1" element="tns:CreateAccountRequest">
-    </part>
-  </message>
   <portType name="ProfilerWebServicePortType">
-    <operation name="resendID">
-      <input message="tns:ResendIDRequest" wsaw:Action="resendID">
-    </input>
-      <output message="tns:ResendIDResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/ResendIDResponse">
-    </output>
-    </operation>
     <operation name="getConfigurations">
       <input message="tns:GetConfigurationsRequest" wsaw:Action="getConfigurations">
     </input>
       <output message="tns:GetConfigurationsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetConfigurationsResponse">
-    </output>
-    </operation>
-    <operation name="getSimpleConfigurations">
-      <input message="tns:GetSimpleConfigurationsRequest" wsaw:Action="getSimpleConfigurations">
-    </input>
-      <output message="tns:GetSimpleConfigurationsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetSimpleConfigurationsResponse">
-    </output>
-    </operation>
-    <operation name="getTransactions">
-      <input message="tns:GetTransactionsRequest" wsaw:Action="getTransactions">
-    </input>
-      <output message="tns:GetTransactionsResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetTransactionsResponse">
-    </output>
-    </operation>
-    <operation name="createAccount">
-      <input message="tns:CreateAccountRequest" wsaw:Action="createAccount">
-    </input>
-      <output message="tns:CreateAccountResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/CreateAccountResponse">
-    </output>
-    </operation>
-    <operation name="checkQuota">
-      <input message="tns:CheckQuotaRequest" wsaw:Action="checkQuota">
-    </input>
-      <output message="tns:CheckQuotaResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/CheckQuotaResponse">
     </output>
     </operation>
     <operation name="getProfile">
@@ -375,12 +190,6 @@
       <output message="tns:GetProfilingStatusResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/GetProfilingStatusResponse">
     </output>
     </operation>
-    <operation name="validateEmail">
-      <input message="tns:ValidateEmailRequest" wsaw:Action="validateEmail">
-    </input>
-      <output message="tns:ValidateEmailResponse" wsaw:Action="http://schemas.xmlsoap.org/wsdl/ProfilerWebServicePortType/ValidateEmailResponse">
-    </output>
-    </operation>
     <operation name="abortProfiling">
       <input message="tns:AbortProfilingRequest" wsaw:Action="abortProfiling">
     </input>
@@ -398,51 +207,6 @@
     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
     <operation name="getConfigurations">
       <soap:operation soapAction="getConfigurations" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="getSimpleConfigurations">
-      <soap:operation soapAction="getSimpleConfigurations" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="getTransactions">
-      <soap:operation soapAction="getTransactions" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="createAccount">
-      <soap:operation soapAction="createAccount" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="checkQuota">
-      <soap:operation soapAction="checkQuota" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="resendID">
-      <soap:operation soapAction="resendID" style="document"/>
       <input>
         <soap:body use="literal"/>
       </input>
@@ -470,15 +234,6 @@
     </operation>
     <operation name="getProfilingStatus">
       <soap:operation soapAction="getProfilingStatus" style="document"/>
-      <input>
-        <soap:body use="literal"/>
-      </input>
-      <output>
-        <soap:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="validateEmail">
-      <soap:operation soapAction="validateEmail" style="document"/>
       <input>
         <soap:body use="literal"/>
       </input>
@@ -516,51 +271,6 @@
         <soap12:body use="literal"/>
       </output>
     </operation>
-    <operation name="getSimpleConfigurations">
-      <soap12:operation soapAction="getSimpleConfigurations" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="getTransactions">
-      <soap12:operation soapAction="getTransactions" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="createAccount">
-      <soap12:operation soapAction="createAccount" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="checkQuota">
-      <soap12:operation soapAction="checkQuota" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="resendID">
-      <soap12:operation soapAction="resendID" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
     <operation name="getProfile">
       <soap12:operation soapAction="getProfile" style="document"/>
       <input>
@@ -581,15 +291,6 @@
     </operation>
     <operation name="getProfilingStatus">
       <soap12:operation soapAction="getProfilingStatus" style="document"/>
-      <input>
-        <soap12:body use="literal"/>
-      </input>
-      <output>
-        <soap12:body use="literal"/>
-      </output>
-    </operation>
-    <operation name="validateEmail">
-      <soap12:operation soapAction="validateEmail" style="document"/>
       <input>
         <soap12:body use="literal"/>
       </input>

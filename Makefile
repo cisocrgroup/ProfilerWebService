@@ -2,8 +2,8 @@
 # Makefile
 #
 
-APACHE ?= $(HOME)/uni/profiler/tomcat/apache-tomcat-8.0.0-RC5
-PROFILER_BACKEND ?= $(APACHE)/../backend
+TOMCAT_HOME ?= $(HOME)/uni/profiler/tomcat/apache-tomcat-8.0.0-RC5
+BACKEND_HOME ?= $(TOMCAT_HOME)/../backend
 
 AXIS2 = axis2-1.6.2
 AXIS2_WAR = var/$(AXIS2)-war/axis2.war
@@ -14,12 +14,21 @@ PROFILER_AAR = build/lib/ProfilerWebService.aar
 PROFILER_JAR = build/lib/ProfilerWebService.jar
 PROFILER_DIR = build/ProfilerWebService
 WEB_INF_DIR = $(PROFILER_DIR)/WEB-INF
+PROFILER_EXE ?= $(BACKEND_HOME)/bin/profiler
 PROFILER_CONF_DIR = $(WEB_INF_DIR)/conf
 PROFILER_LIB_DIR = $(PROFILER_DIR)/lib
 PROFILER_INI = $(PROFILER_CONF_DIR)/profiler.ini
 SERVICES_XML = resources/services.xml
+BUILD_XML = build.xml
 WSDL = resources/ProfilerWebService.wsdl
-PROFILER_SKELETON = src/cis/profiler/web/ProfilerWebServiceSkeleton.java
+PWS_INTERFACE = src/cis/profiler/web/ProfilerWebServiceSkeletonInterface.java
+PWS_STUB = src/cis/profiler/web/ProfilerWebServiceStub.java
+PWS_MRIO = src/cis/profiler/web/ProfilerWebServiceMessageReceiverInOut.java
+PWS_HOST ?= http://localhost
+PWS_PORT ?= 8080
+TEST_HOST ?= $(PWS_HOST):$(PWS_PORT)
+PWS_URL ?= $(TEST_HOST)/axis2/services/ProfilerWebService
+SUDO ?=
 
 # TOOLS
 ANT ?= ant
@@ -34,10 +43,11 @@ default: $(PROFILER_AAR)
 # -sd: service-description
 # -or: override
 # -ssi service-interface
-build.xml: $(WSDL) $(WSDL2JAVA)
-	$(WSDL2JAVA) -uri $< -p cis.profiler.web -s -d adb -sd -ss -ssi -g -scn ProfilerWebService
 
-$(PROFILER_AAR): build.xml $(wildcard src/cis/profiler/web/*.java)
+$(BUILD_XML) $(SERVICES_XML): $(WSDL2JAVA) $(WSDL)
+	$(WSDL2JAVA) -uri $(WSDL) -p cis.profiler.web --noWSDL -s -d adb -sd -ssi -ss -g -scn ProfilerWebService
+
+$(PROFILER_AAR): $(BUILD_XML) $(SERVICES_XML) $(wildcard src/cis/profiler/web/*.java) $(wildcard src/cis/profiler/client/*.java)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) $(ANT)
 
 var/$(AXIS2).zip:
@@ -54,42 +64,20 @@ $(WSDL2JAVA): var/$(AXIS2).zip
 $(AXIS2_WAR): var/$(AXIS2)-war.zip
 	unzip -d $(dir $@) -u $<
 	touch $@
+deploy-axis2: $(AXIS2_WAR)
+	$(SUDO) $(CP) $(AXIS2_WAR) $(TOMCAT_HOME)/webapps
 
 $(PROFILER_INI): scripts/generate_profiler_ini.sh
 	@$(MKDIR) $(PROFILER_CONF_DIR)
-	$< $@ $(PROFILER_BACKEND)
+	$< $@ $(BACKEND_HOME) $(PROFILER_EXE)
 
-$(PROFILER_SKELETON): build.xml
-	scripts/generate_profiler_skeleton.sh $@
+deploy: $(PROFILER_AAR) $(PROFILER_INI) $(BACKEND_HOME)
+	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
+	$(SUDO) $(MKDIR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
+	$(SUDO) $(CP) $(PROFILER_INI) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
+	$(SUDO) $(CP) $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 
-deploy: do-deploy restart-apache
-
-do-deploy: $(PROFILER_AAR) $(PROFILER_INI) $(AXIS2_WAR) backend
-	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/conf
-	@$(MKDIR) $(APACHE)/webapps/axis2/WEB-INF/services
-	$(CP) $(AXIS2_WAR) $(APACHE)/webapps/
-	$(CP) $(PROFILER_INI) $(APACHE)/webapps/axis2/WEB-INF/conf
-	$(CP) $(PROFILER_AAR) $(APACHE)/webapps/axis2/WEB-INF/services
-
-restart-apache: do-deploy
-	$(APACHE)/bin/shutdown.sh
-	$(APACHE)/bin/startup.sh
-
-backend:
-	BACKEND=$(PROFILER_BACKEND) $(MAKE) -C gsm/lexicon backend
-
-# HELPER
-mkdir-%: dir = $(subst -,/,$*)
-mkdir-%:
-	@$(MKDIR) $(dir)
-
-.PHONY: clean
-clean:
-	$(RM) build.xml #$(PROFILER_SKELETON)
-	$(RM) -r build
-
-.PHONY: distclean
-distclean: clean
-	$(RM) -r var
-	$(RM) -r src/de
-	$(RM) -r src/org
+$(BACKEND_HOME):
+	$(SUDO) $(MAKE) BACKEND=$(BACKEND_HOME) -C gsm/lexicon backend
+include make/test.make
+include make/clean.make
