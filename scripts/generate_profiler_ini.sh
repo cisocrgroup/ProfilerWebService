@@ -21,10 +21,4 @@ cat > $1 <<EOF
 #
 backend = $2
 profiler = $3
-# DEPRECATED SETTINGS
-dbURL = jdbc:mysql://alpha.cis.uni-muenchen.de:3306/ProfilerWebService
-username = pws
-password = pws1314
-default_quota = 100
-backend_home = /mounts/Users/student/finkf/uni/profiler/tomcat/postcorrection_backend
 EOF
