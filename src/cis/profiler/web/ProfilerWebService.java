@@ -42,7 +42,7 @@ import javax.mail.internet.MimeMultipart;
  * @author flo (flo@cis.lmu.de)
  */
 public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
-    private static final String CONFIG_FILE = "/conf/profiler.ini";
+    private static final String CONFIG_FILE = "/profiler.ini";
     private final Logger logger;
     private final Backend backend;
     private Profiler profiler = null;
@@ -51,7 +51,8 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
         logger = Logger.getLogger(ProfilerWebService.class.getName());
         try {
             log(Level.INFO, ("configuration file: " + CONFIG_FILE));
-            backend = new Backend(ProfilerWebService.class.getResourceAsStream(CONFIG_FILE));
+            backend = new Backend(ProfilerWebService.class.getResourceAsStream(
+                        CONFIG_FILE));
             logBackend();
         } catch (Exception e) {
             logger.log(Level.SEVERE, "error: ", e);
