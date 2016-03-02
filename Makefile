@@ -3,7 +3,7 @@
 #
 
 # edit or set via `export TOMCAT_HOME=...` to point to the tomcat home directory
-TOMCAT_HOME ?= $(HOME)/tomcat/apache-tomcat-8.0.26
+TOMCAT_HOME ?= $(HOME)/tomcat/apache-tomcat-8.0.32
 # edit or set via `export BACKEND_HOME=...` to point to language backend
 BACKEND_HOME ?= $(TOMCAT_HOME)/../backend
 # edit or set via `export JAVA_HOME=...` to point to your java installation
@@ -36,10 +36,15 @@ $(PROFILER_AAR): $(BUILD_XML) $(SERVICES_XML) $(wildcard src/cis/profiler/web/*.
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) ant
 
 deploy: $(PROFILER_AAR)
+	$(TOMCAT_HOME)/bin/shutdown.sh
+	mkdir -p build/ProfilerWebService/WEB-INF/conf
+	scripts/generate_profiler_ini.sh build/ProfilerWebService/WEB-INF/conf/profiler.ini $(BACKEND_HOME) $(PROFILER_EXE)
 	$(SUDO) mkdir -p $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) mkdir -p $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
 	$(SUDO) cp $(PROFILER_AAR) $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
-	scripts/generate_profiler_ini.sh $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf/profiler.ini $(BACKEND_HOME) $(PROFILER_EXE)
+	$(SUDO) cp build/ProfilerWebService/WEB-INF/conf/profiler.ini $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
+	$(TOMCAT_HOME)/bin/startup.sh
+
 clean:
 	$(RM) $(BUILD_XML)
 	$(RM) $(SERVICES_XML)
