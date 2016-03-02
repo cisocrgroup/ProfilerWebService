@@ -24,7 +24,7 @@ PROFILER_INI = profiler.ini
 ANT_OPTS = -Dbuild.sysclasspath=ignore
 
 # DEFAULT
-default: $(PROFILER_AAR)
+default: $(PROFILER_AAR) $(PROFILER_INI)
 
 # -ss: server-side
 # -sd: service-description
@@ -35,11 +35,10 @@ $(BUILD_XML) $(SERVICES_XML):
 
 $(PROFILER_AAR): $(BUILD_XML) $(SERVICES_XML) $(wildcard src/cis/profiler/web/*.java) $(wildcard src/cis/profiler/client/*.java)
 	ANT_OPTS=$(ANT_OPTS) AXIS2_HOME=$(AXIS2_HOME) ant
-
-deploy: $(PROFILER_AAR)
-#	cd $(TOMCAT_HOME) && bin/shutdown.sh
-	mkdir -p build/ProfilerWebService/WEB-INF/conf
+$(PROFILER_INI):
 	scripts/generate_profiler_ini.sh $(PROFILER_INI) $(BACKEND_HOME) $(PROFILER_EXE)
+deploy: $(PROFILER_AAR) $(PROFILER_INI)
+#	cd $(TOMCAT_HOME) && bin/shutdown.sh
 	jar uf $(PROFILER_AAR) $(PROFILER_INI)
 	$(SUDO) mkdir -p $(TOMCAT_HOME)/webapps/axis2/WEB-INF/conf
 	$(SUDO) mkdir -p $(TOMCAT_HOME)/webapps/axis2/WEB-INF/services
