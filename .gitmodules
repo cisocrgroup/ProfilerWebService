@@ -1,3 +1,0 @@
-[submodule "gsm/lexicon"]
-	path = gsm/lexicon
-	url = git@gitlab.cis.lmu.de:CLARIN/lexicon

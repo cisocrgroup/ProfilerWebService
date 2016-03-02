@@ -11,15 +11,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class Backend {
-        private final static Logger logger =
-                Logger.getLogger(Backend.class.getName());
+        private final Logger logger;
         private final String BACKEND_KEY = "backend";
         private final String PROFILER_KEY = "profiler";
         private Properties backend;
 
-        public Backend(InputStream is) throws IOException {
+        public Backend(InputStream is) throws Exception {
+                logger = Logger.getLogger(Backend.class.getName());
+                logger.log(Level.INFO, "logger initialized");
                 backend = new Properties();
-                backend.load(new InputStreamReader(is));
+                logger.log(Level.INFO, "new properties created");
+                if (is == null) {
+                        throw new Exception("Could not read configuration file: null");
+                }
+                backend.load(is);
+                logger.log(Level.INFO, "Backend loaded");
         }
 
         public File getBackendDir() throws BackendException {
