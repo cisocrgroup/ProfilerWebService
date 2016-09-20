@@ -49,6 +49,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
 
     public ProfilerWebService() {
         logger = Logger.getLogger(ProfilerWebService.class.getName());
+
         try {
             log(Level.INFO, ("configuration file: " + CONFIG_FILE));
             backend = new Backend(ProfilerWebService.class.getResourceAsStream(

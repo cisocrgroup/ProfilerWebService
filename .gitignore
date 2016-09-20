@@ -3,6 +3,7 @@ resources/services.xml
 build/*
 dist/*
 build.xml
+Makefile-u
 var/*
 src/de/*
 src/org/*
