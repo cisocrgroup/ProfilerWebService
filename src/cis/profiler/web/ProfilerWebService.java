@@ -355,7 +355,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
        ResendIDRequestType rqt = resendIDRequest.getResendIDRequest();
        if (con != null && prop != null) {
            try {
-               // check if email adress has already been registered for an account
+               // check if email address has already been registered for an account
                Statement stat = con.createStatement();
                if (stat.execute("SELECT COUNT(email) FROM users WHERE email=\"" + rqt.getEmail() + "\"")) {
                    ResultSet rs = stat.getResultSet();
@@ -367,7 +367,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                            rst.setReturncode(-1);
                            resp.setResendIDResponse(rst);
                            return resp;
-                           // generate new uuid for email adress and send confirmation mail
+                           // generate new uuid for email address and send confirmation mail
                        } else {
                            String old_id = "";
                            stat.execute("SELECT userid FROM users WHERE email=\"" + rqt.getEmail() + "\"");
@@ -389,7 +389,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                                            int rows = stat.executeUpdate("UPDATE users SET userid=\"" + userid + "\" WHERE email=\"" + rqt.getEmail() + "\"");
                                            // update the transactions table to keep track of the users transactions
                                            stat.executeUpdate("UPDATE transactions SET userid=\"" + userid + "\" WHERE userid =\"" + old_id + "\"");
-                                           // success, send email containing generated id to email adress provided
+                                           // success, send email containing generated id to email address provided
                                            if (rows > 0) {
                                                this.sendMail(rqt.getEmail(), "Your new CIS Profiler ID", "A new userid has been generated for you!\n Please copy it from this email and enter it in the GUI Options.\n\n Your ID is: " + userid);
                                                rst.setMessage("success");
@@ -503,7 +503,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
        CreateAccountRequestType rqt = createAccountRequest.getCreateAccountRequest();
        if (con != null && prop != null) {
            try {
-               // check if email adress has already been registered for an account
+               // check if email address has already been registered for an account
                Statement stat = con.createStatement();
                if (stat.execute("SELECT COUNT(email) FROM users WHERE email=\"" + rqt.getEmail() + "\"")) {
                    ResultSet rs = stat.getResultSet();
@@ -529,7 +529,7 @@ public class ProfilerWebService implements ProfilerWebServiceSkeletonInterface {
                                        if (val == 0) {
                                            unique = true;
                                            int rows = stat.executeUpdate("INSERT INTO users VALUES(\"" + rqt.getEmail() + "\",\"" + userid + "\",\"" + rqt.getUsername() + "\",\"" + rqt.getInstitution() + "\"," + Integer.parseInt(prop.getProperty("default_quota")) + ")");
-                                           // success, send email containing generated id to email adress provided
+                                           // success, send email containing generated id to email address provided
                                            if (rows > 0) {
                                                try {
                                                    String[] recipients = {rqt.getEmail()};
