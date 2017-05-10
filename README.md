@@ -36,7 +36,7 @@ defaults to `$TOMCAT_HOME/../backend`.
 If you want to change this value you can set the environment variable `BACKEND_HOME` accordingly.
 7. Change into the `pws` base directory and type `$ make`.
 8. If you need special permissions for your tomcat installation you can set them using `SUDO`:
-   `SUDO=sudo make` or `SUOD='sudo -u tomcat-user' make`.
+   `SUDO=sudo make` or `SUDO='sudo -u tomcat-user' make`.
 9. The make process
    * downloads `axis2-1.6.2` into the `pws/vars` directory
    * generates the ant buildfile `build.xml` and the WSDL files
@@ -47,7 +47,7 @@ If you want to change this value you can set the environment variable `BACKEND_H
 10. After the build process has finished succesfully,
 you can check the ProfilerWebService using `$ make test`.
 You can further tune the url of the Webservice using the variables `HOST`, `PORT` and `PWS_URL`.
-[*WSDL]: Web Service Descritpion Language
+[*WSDL]: Web Service Description Language
 
 # Versions
 This project is dependend on different intermingled technologies.
