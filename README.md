@@ -44,7 +44,7 @@ If you want to change this value you can set the environment variable `BACKEND_H
    * builds the profiler
    * generates the language resources
    * installs the language ressources and the profiler into the language backend directory
-10. After the build process has finished succesfully,
+10. After the build process has finished successfully,
 you can check the ProfilerWebService using `$ make test`.
 You can further tune the url of the Webservice using the variables `HOST`, `PORT` and `PWS_URL`.
 [*WSDL]: Web Service Description Language
